@@ -1,0 +1,26 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "DenyEverythingExceptWebsiteResources",
+            "Effect": "Deny",
+            "NotAction": [
+                "apigateway:*",
+                "acm:*",
+                "cloudformation:*",
+                "cloudfront:*",
+                "codebuild:*",
+                "codedeploy:*",
+                "codepipeline:*",
+                "dynamodb:*",
+                "iam:*",
+                "kms:*",
+                "lambda:*",
+                "route53:*",
+                "route53domains:*",
+                "s3:*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
