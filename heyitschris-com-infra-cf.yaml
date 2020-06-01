@@ -74,7 +74,10 @@ Resources:
               - '.s3.amazonaws.com'
           Id: myS3Origin
           S3OriginConfig:
-            OriginAccessIdentity: !Ref CloudFrontOAI
+            OriginAccessIdentity: !Join 
+              - ''
+              - - 'origin-access-identity/cloudfront/'
+                - !Ref CloudFrontOAI
         Enabled: 'true'
         Comment: This is a comment
         DefaultRootObject: index.html
