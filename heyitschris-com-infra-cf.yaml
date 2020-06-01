@@ -78,10 +78,10 @@ Resources:
         Enabled: 'true'
         Comment: This is a comment
         DefaultRootObject: index.html
-        Logging:
-          IncludeCookies: 'false'
-          Bucket: !Ref LogsBucket
-          Prefix: CloudFrontLogs
+        # Logging:
+        #   IncludeCookies: 'false'
+        #   Bucket: !Ref LogsBucket
+        #   Prefix: CloudFrontLogs
         Aliases:
         - heyitschris.com
         - www.heyitschris.com
