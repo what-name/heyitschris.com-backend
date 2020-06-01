@@ -109,6 +109,20 @@ Resources:
         ViewerCertificate:
           CloudFrontDefaultCertificate: 'true'
 
+  DDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "heyitschris.com"
+      AttributeDefinitions:
+        -
+          AttributeName: "id"
+          AttributeType: "S"
+      KeySchema:
+        -
+          AttributeName: "id"
+          KeyType: "HASH"
+      BillingMode: PAY_PER_REQUEST
+
 Outputs:
   # DEPRECATED
   # WebsiteURL:
