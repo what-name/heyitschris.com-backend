@@ -56,56 +56,48 @@ Resources:
                   - /*
         Bucket: !Ref WebsiteBucket
   
-  # SAMPLE for now
-  # CloudFrontDistribution:
-  #   Type: AWS::CloudFront::Distribution
-  #   Properties:
-  #     DistributionConfig:
-  #       Origins:
-  #       - DomainName: heyitschris-com.s3.amazonaws.com
-  #         Id: myS3Origin
-  #         S3OriginConfig:
-  #           OriginAccessIdentity: origin-access-identity/cloudfront/E127EXAMPLE51Z
-  #       Enabled: 'true'
-  #       Comment: This is a comment
-  #       DefaultRootObject: index.html
-  #       Logging:
-  #         IncludeCookies: 'false'
-  #         Bucket: mylogs.s3.amazonaws.com
-  #         Prefix: myprefix
-  #       Aliases:
-  #       - mysite.example.com
-  #       - yoursite.example.com
-  #       DefaultCacheBehavior:
-  #         AllowedMethods:
-  #         - DELETE
-  #         - GET
-  #         - HEAD
-  #         - OPTIONS
-  #         - PATCH
-  #         - POST
-  #         - PUT
-  #         TargetOriginId: myS3Origin
-  #         ForwardedValues:
-  #           QueryString: 'false'
-  #           Cookies:
-  #             Forward: none
-  #         TrustedSigners:
-  #         - 1234567890EX
-  #         - 1234567891EX
-  #         ViewerProtocolPolicy: allow-all
-  #       PriceClass: PriceClass_200
-  #       Restrictions:
-  #         GeoRestriction:
-  #           RestrictionType: whitelist
-  #           Locations:
-  #           - AQ
-  #           - CV
-  #       ViewerCertificate:
-  #         CloudFrontDefaultCertificate: 'true'
-  #       Tags:
-  #         - Key: CostCenter
-  #           Value: heyitschris.com
+
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+        - DomainName: !Join 
+            - ''
+            - - !Ref WebsiteBucket
+              - '.s3.amazonaws.com'
+          Id: myS3Origin
+          # S3OriginConfig:
+          #   OriginAccessIdentity: origin-access-identity/cloudfront/E127EXAMPLE51Z
+        Enabled: 'true'
+        Comment: This is a comment
+        DefaultRootObject: index.html
+        Logging:
+          IncludeCookies: 'false'
+          Bucket: !Ref LogsBucket
+          Prefix: CloudFrontLogs
+        Aliases:
+        - heyitschris.com
+        - www.heyitschris.com
+        DefaultCacheBehavior:
+          AllowedMethods:
+          - GET
+          - OPTIONS
+          TargetOriginId: myS3Origin
+          ForwardedValues:
+            QueryString: 'false'
+            Cookies:
+              Forward: none
+          # TrustedSigners:
+          # - 1234567890EX
+          # - 1234567891EX
+          ViewerProtocolPolicy: allow-all
+        PriceClass: PriceClass_100
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: 'true'
+        Tags:
+          - Key: CostCenter
+            Value: heyitschris.com
 
 Outputs:
   WebsiteURL:
@@ -113,6 +105,10 @@ Outputs:
       - WebsiteBucket
       - WebsiteURL
     Description: URL for website hosted on S3
+  CloudFrontURL:
+    Value: !GetAtt 
+      - CloudFrontDistribution
+      - DomainName
   S3BucketSecureURL:
     Value: !Join 
       - ''
