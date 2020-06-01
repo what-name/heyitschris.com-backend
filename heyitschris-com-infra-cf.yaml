@@ -110,20 +110,26 @@ Resources:
           CloudFrontDefaultCertificate: 'true'
 
 Outputs:
-  WebsiteURL:
-    Value: !GetAtt 
-      - WebsiteBucket
-      - WebsiteURL
-    Description: URL for website hosted on S3
+  # DEPRECATED
+  # WebsiteURL:
+  #   Value: !GetAtt 
+  #     - WebsiteBucket
+  #     - WebsiteURL
+  #   Description: URL for website hosted on S3
   CloudFrontURL:
-    Value: !GetAtt 
-      - CloudFrontDistribution
-      - DomainName
-  S3BucketSecureURL:
     Value: !Join 
       - ''
       - - 'https://'
         - !GetAtt 
-          - WebsiteBucket
+          - CloudFrontDistribution
           - DomainName
-    Description: Name of S3 bucket to hold website content
+    Description: HTTPS Access point
+  # DEPRECATED
+  # S3BucketSecureURL:
+  #   Value: !Join 
+  #     - ''
+  #     - - 'https://'
+  #       - !GetAtt 
+  #         - WebsiteBucket
+  #         - DomainName
+  #   Description: Name of S3 bucket to hold website content
