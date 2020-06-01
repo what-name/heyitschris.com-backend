@@ -11,7 +11,7 @@ Resources:
       BucketName:
         Ref: S3BucketName
       AccessControl: PublicRead
-      OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOAI}
+      # OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOAI}
       WebsiteConfiguration:
         IndexDocument: index.html
         # ErrorDocument: error.html 
