@@ -27,6 +27,17 @@ Resources:
         - Key: CostCenter
           Value: heyitschris.com
 
+  LogsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Join 
+        - ''
+        - - 'logs-'
+          - !Ref WebsiteBucket
+      Tags:
+        - Key: CostCenter
+          Value: heyitschris.com
+
   WebsiteBucketBucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
@@ -44,6 +55,60 @@ Resources:
                   - !Ref WebsiteBucket
                   - /*
         Bucket: !Ref WebsiteBucket
+        Tags:
+          - Key: CostCenter
+            Value: heyitschris.com
+  
+  # SAMPLE for now
+  # CloudFrontDistribution:
+  #   Type: AWS::CloudFront::Distribution
+  #   Properties:
+  #     DistributionConfig:
+  #       Origins:
+  #       - DomainName: heyitschris-com.s3.amazonaws.com
+  #         Id: myS3Origin
+  #         S3OriginConfig:
+  #           OriginAccessIdentity: origin-access-identity/cloudfront/E127EXAMPLE51Z
+  #       Enabled: 'true'
+  #       Comment: This is a comment
+  #       DefaultRootObject: index.html
+  #       Logging:
+  #         IncludeCookies: 'false'
+  #         Bucket: mylogs.s3.amazonaws.com
+  #         Prefix: myprefix
+  #       Aliases:
+  #       - mysite.example.com
+  #       - yoursite.example.com
+  #       DefaultCacheBehavior:
+  #         AllowedMethods:
+  #         - DELETE
+  #         - GET
+  #         - HEAD
+  #         - OPTIONS
+  #         - PATCH
+  #         - POST
+  #         - PUT
+  #         TargetOriginId: myS3Origin
+  #         ForwardedValues:
+  #           QueryString: 'false'
+  #           Cookies:
+  #             Forward: none
+  #         TrustedSigners:
+  #         - 1234567890EX
+  #         - 1234567891EX
+  #         ViewerProtocolPolicy: allow-all
+  #       PriceClass: PriceClass_200
+  #       Restrictions:
+  #         GeoRestriction:
+  #           RestrictionType: whitelist
+  #           Locations:
+  #           - AQ
+  #           - CV
+  #       ViewerCertificate:
+  #         CloudFrontDefaultCertificate: 'true'
+  #       Tags:
+  #         - Key: CostCenter
+  #           Value: heyitschris.com
 
 Outputs:
   WebsiteURL:
