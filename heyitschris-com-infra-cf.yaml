@@ -85,9 +85,9 @@ Resources:
         #   IncludeCookies: 'false'
         #   Bucket: !Ref LogsBucket
         #   Prefix: CloudFrontLogs
-        Aliases:
-        - heyitschris.com
-        - www.heyitschris.com
+        # Aliases:
+        # - heyitschris.com
+        # - www.heyitschris.com
         DefaultCacheBehavior:
           AllowedMethods:
           - HEAD
