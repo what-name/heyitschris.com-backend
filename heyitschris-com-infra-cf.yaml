@@ -55,9 +55,6 @@ Resources:
                   - !Ref WebsiteBucket
                   - /*
         Bucket: !Ref WebsiteBucket
-        Tags:
-          - Key: CostCenter
-            Value: heyitschris.com
   
   # SAMPLE for now
   # CloudFrontDistribution:
