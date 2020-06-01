@@ -90,6 +90,7 @@ Resources:
         - www.heyitschris.com
         DefaultCacheBehavior:
           AllowedMethods:
+          - HEAD
           - GET
           - OPTIONS
           TargetOriginId: myS3Origin
