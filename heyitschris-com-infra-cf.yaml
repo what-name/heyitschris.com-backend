@@ -11,6 +11,7 @@ Resources:
       BucketName:
         Ref: S3BucketName
       AccessControl: PublicRead
+      OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOAI}
       WebsiteConfiguration:
         IndexDocument: index.html
         # ErrorDocument: error.html 
@@ -56,6 +57,11 @@ Resources:
                   - /*
         Bucket: !Ref WebsiteBucket
   
+  CloudFrontOAI:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties: 
+      CloudFrontOriginAccessIdentityConfig: 
+        Comment: The OAI for the heyitschris-com bucket
 
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
@@ -68,7 +74,7 @@ Resources:
               - '.s3.amazonaws.com'
           Id: myS3Origin
           S3OriginConfig:
-           # OriginAccessIdentity: #origin-access-identity/cloudfront/E127EXAMPLE51Z
+            OriginAccessIdentity: !Ref CloudFrontOAI
         Enabled: 'true'
         Comment: This is a comment
         DefaultRootObject: index.html
