@@ -48,10 +48,10 @@ Resources:
           Statement:
             - Sid: PublicReadForGetBucketObjects
               Effect: Allow
-              Principal: !Join 
-                - ''
-                - - 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity '
-                  - !Ref CloudFrontOAI
+              Principal:
+                CanonicalUser: !GetAtt
+                  - CloudFrontOAI
+                  - S3CanonicalUserId
               Action: 's3:GetObject'
               Resource: !Join 
                 - ''
