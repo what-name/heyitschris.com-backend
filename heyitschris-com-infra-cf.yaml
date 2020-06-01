@@ -95,9 +95,6 @@ Resources:
         PriceClass: PriceClass_100
         ViewerCertificate:
           CloudFrontDefaultCertificate: 'true'
-        Tags:
-          - Key: CostCenter
-            Value: heyitschris.com
 
 Outputs:
   WebsiteURL:
