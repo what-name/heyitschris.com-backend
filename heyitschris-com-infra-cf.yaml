@@ -104,7 +104,7 @@ Resources:
           # TrustedSigners:
           # - 1234567890EX
           # - 1234567891EX
-          ViewerProtocolPolicy: allow-all
+          ViewerProtocolPolicy: redirect-to-https
         PriceClass: PriceClass_100
         ViewerCertificate:
           CloudFrontDefaultCertificate: 'true'
