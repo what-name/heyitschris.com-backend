@@ -165,14 +165,18 @@ Resources:
     Type: AWS::Lambda::Function
     Description: This function retrieves and updates the visitor count in the DynamoDB database.
     Properties:
-      # Environment: #fixme create an env variable with the table name and change the code to use that as well
+      Environment:
+        Variables:
+          databaseName: !Ref DDBTable
       Code:
         ZipFile: |
           import json
           import boto3
+          import os
 
           dynamodb = boto3.resource('dynamodb')
-          table = dynamodb.Table('heyitschris.com')
+          ddbTableName = os.environ['databaseName']
+          table = dynamodb.Table(ddbTableName)
 
           def handler(event, context):
               response = table.update_item(
