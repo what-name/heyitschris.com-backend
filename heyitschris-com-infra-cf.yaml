@@ -14,11 +14,8 @@ Resources:
     Properties:
       BucketName:
         Ref: S3BucketName
-      AccessControl: PublicRead
-      # OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOAI}
       WebsiteConfiguration:
-        IndexDocument: index.html
-        # ErrorDocument: error.html 
+        IndexDocument: index.html 
       CorsConfiguration:
         CorsRules:
           - 
@@ -68,8 +65,10 @@ Resources:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties: 
       CloudFrontOriginAccessIdentityConfig: 
-        Comment: The OAI for the heyitschris-com bucket
-
+        Comment: !Join 
+          - ''
+          - - 'The OAI for the bucket: '
+            - !Ref WebsiteBucket
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
@@ -162,18 +161,34 @@ Resources:
               - logs:*
               Resource: "*"
 
-  InitFunction:
+  VisitorCountLambda:
     Type: AWS::Lambda::Function
+    Description: This function retrieves and updates the visitor count in the DynamoDB database.
     Properties:
+      # Environment: #fixme create an env variable with the table name and change the code to use that as well
       Code:
-        ZipFile: >
+        ZipFile: |
           import json
+          import boto3
+
+          dynamodb = boto3.resource('dynamodb')
+          table = dynamodb.Table('heyitschris.com')
 
           def handler(event, context):
-              
-              print("DEBUG ECHO 1")
+              response = table.update_item(
+                  Key={
+                      "id": "visitorCount"
+                  },
+                  UpdateExpression='SET amount = amount + :inc',
+                  ExpressionAttributeValues={
+                      ':inc': 1
+                  },
+                  ReturnValues="UPDATED_NEW"
+              )
+              print("Response visitor count: ", response["Attributes"]["amount"])
               return {
-                  "statusCode": 200
+                  "statusCode": 200,
+                  "visitorCount": response["Attributes"]["amount"]
               }
       Handler: index.handler
       Role: !GetAtt LambdaRole.Arn
@@ -183,20 +198,15 @@ Resources:
         - Key: CostCenter
           Value: heyitschris.com
 
-  InitializeDynamoDB:
-    Type: Custom::InitFunction
-    DependsOn: DDBTable
-    Properties:
-      ServiceToken: !GetAtt InitFunction.Arn
-      DynamoTableName: !Ref DDBTable
+  # This initialization function always fails to create. ignoring and solving it manually...
+  # InitializeDynamoDB:
+  #   Type: Custom::InitFunction
+  #   DependsOn: DDBTable
+  #   Properties:
+  #     ServiceToken: !GetAtt InitFunction.Arn
+  #     DynamoTableName: !Ref DDBTable
 
 Outputs:
-  # DEPRECATED
-  # WebsiteURL:
-  #   Value: !GetAtt 
-  #     - WebsiteBucket
-  #     - WebsiteURL
-  #   Description: URL for website hosted on S3
   CloudFrontURL:
     Value: !Join 
       - ''
@@ -205,14 +215,13 @@ Outputs:
           - CloudFrontDistribution
           - DomainName
     Description: HTTPS Access point
-  DynamoDBTableRefPsuedoParam:
+  DEBUG_DynamoDBTableRefPsuedoParam:
     Value: !Ref DDBTable
-  # DEPRECATED
-  # S3BucketSecureURL:
-  #   Value: !Join 
-  #     - ''
-  #     - - 'https://'
-  #       - !GetAtt 
-  #         - WebsiteBucket
-  #         - DomainName
-  #   Description: Name of S3 bucket to hold website content
+  DEBUG_LambdaPolicyResourceARN:
+    Value: !Join 
+      - ''
+      - - 'arn:aws:dynamodb:'
+        - !Ref AWS::Region
+        - !Ref AWS::AccountId
+        - ':table/'
+        - !Ref DDBTable
