@@ -191,14 +191,14 @@ Resources:
       Runtime: nodejs12.x
       Timeout: 60
 
-  InitializeDynamoDB:
-    Type: Custom::InitFunction
-    DependsOn: DDBTable
-    Properties:
-      ServiceToken:
-         Fn::GetAtt: [ InitFunction , "Arn" ]
-      DynamoTableName:
-        Ref: DDBTable
+  # InitializeDynamoDB:
+  #   Type: Custom::InitFunction
+  #   DependsOn: DDBTable
+  #   Properties:
+  #     ServiceToken:
+  #        Fn::GetAtt: [ InitFunction , "Arn" ]
+  #     DynamoTableName:
+  #       Ref: DDBTable
 
 Outputs:
   # DEPRECATED
