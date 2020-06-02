@@ -1,7 +1,11 @@
 ---
 Parameters:
+  # FIXME set input constraints for these
   S3BucketName:
     Description: "The name of the S3 bucket that will store the website files"
+    Type: String
+  DynamoDBTableName:
+    Description: "The name of the DynamoDB table for the visitor count"
     Type: String
 
 Resources:
@@ -112,7 +116,8 @@ Resources:
   DDBTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: "heyitschris.com"
+      TableName: 
+        !Ref DynamoDBTableName
       AttributeDefinitions:
         -
           AttributeName: "id"
@@ -122,6 +127,77 @@ Resources:
           AttributeName: "id"
           KeyType: "HASH"
       BillingMode: PAY_PER_REQUEST
+  
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+        - PolicyName: dynamodbAccessRole
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - dynamodb:*
+              Resource: !Join 
+                - ''
+                - - 'arn:aws:dynamodb:'
+                  - !Ref AWS::Region
+                  - !Ref AWS::AccountId
+                  - ':table/'
+                  - !Ref DDBTable
+            - Effect: Allow
+              Action:
+              - logs:*
+              Resource: "*"
+
+  InitFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: >
+          const AWS = require("aws-sdk");
+          const response = require("cfn-response");
+          const docClient = new AWS.DynamoDB.DocumentClient();
+          exports.handler = function(event, context) {
+              console.log(JSON.stringify(event,null,2));
+              var params = {
+                TableName: event.ResourceProperties.DynamoTableName,
+                Item:{
+                    "visitorCount": "0"
+                }
+            };
+          docClient.put(params, function(err, data) { if (err) {
+            response.send(event, context, "FAILED", {});
+          } else {
+            response.send(event, context, "SUCCESS", {});
+          }
+          });
+          };
+      Handler: index.handler
+      Role:
+        Fn::GetAtt: [ LambdaRole , "Arn" ]
+      Runtime: nodejs4.3
+      Timeout: 60
+
+  InitializeDynamoDB:
+    Type: Custom::InitFunction
+    DependsOn: DDBTable
+    Properties:
+      ServiceToken:
+         Fn::GetAtt: [ InitFunction , "Arn" ]
+      DynamoTableName:
+        Ref: DDBTable
 
 Outputs:
   # DEPRECATED
@@ -138,6 +214,8 @@ Outputs:
           - CloudFrontDistribution
           - DomainName
     Description: HTTPS Access point
+  DynamoDBTableRefPsuedoParam:
+    Value: !Ref DDBTable
   # DEPRECATED
   # S3BucketSecureURL:
   #   Value: !Join 
