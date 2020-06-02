@@ -104,9 +104,6 @@ Resources:
             QueryString: 'false'
             Cookies:
               Forward: none
-          # TrustedSigners:
-          # - 1234567890EX
-          # - 1234567891EX
           ViewerProtocolPolicy: redirect-to-https
         PriceClass: PriceClass_100
         ViewerCertificate:
