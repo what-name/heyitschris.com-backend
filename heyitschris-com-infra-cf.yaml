@@ -200,8 +200,7 @@ Resources:
     Properties:
       ServiceToken:
         Fn::GetAtt: [ InitFunction , "Arn" ]
-      DynamoTableName:
-        !Ref DDBTable
+      DynamoTableName: !Ref DDBTable
 
 Outputs:
   # DEPRECATED
