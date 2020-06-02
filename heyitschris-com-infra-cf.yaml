@@ -167,29 +167,19 @@ Resources:
     Properties:
       Code:
         ZipFile: >
-          const AWS = require("aws-sdk");
-          const response = require("cfn-response");
-          const docClient = new AWS.DynamoDB.DocumentClient();
-          exports.handler = function(event, context) {
-              console.log("EVENT: ")
-              console.log(JSON.stringify(event,null,2));
-              var params = {
-                TableName: event.ResourceProperties.DynamoTableName,
-                Item:{
-                    "visitorCount": "0"
-                }
-            };
-          docClient.put(params, function(err, data) { if (err) {
-            response.send(event, context, "FAILED", {});
-          } else {
-            response.send(event, context, "SUCCESS", {});
-          }
-          });
-          };
+          import json
+          import boto3
+
+          def handler(event, context):
+              
+              print("DEBUG ECHO 1")
+              return {
+                  "statusCode": 200
+              }
       Handler: index.handler
       Role: !GetAtt LambdaRole.Arn
-      Runtime: nodejs12.x
-      Timeout: 60
+      Runtime: python3.6
+      Timeout: 2
       Tags:
         - Key: CostCenter
           Value: heyitschris.com
