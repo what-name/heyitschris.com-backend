@@ -215,9 +215,9 @@ Outputs:
           - CloudFrontDistribution
           - DomainName
     Description: HTTPS Access point
-  DEBUG_DynamoDBTableRefPsuedoParam:
+  DEBUGDynamoDBTableRefPsuedoParam:
     Value: !Ref DDBTable
-  DEBUG_LambdaPolicyResourceARN:
+  DEBUGLambdaPolicyResourceARN:
     Value: !Join 
       - ''
       - - 'arn:aws:dynamodb:'
