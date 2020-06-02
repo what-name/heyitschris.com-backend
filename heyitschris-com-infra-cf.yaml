@@ -190,6 +190,9 @@ Resources:
         Fn::GetAtt: [ LambdaRole , "Arn" ]
       Runtime: nodejs12.x
       Timeout: 60
+      Tags:
+        - Key: CostCenter
+          Value: heyitschris.com
 
   # InitializeDynamoDB:
   #   Type: Custom::InitFunction
