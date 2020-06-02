@@ -171,6 +171,7 @@ Resources:
           const response = require("cfn-response");
           const docClient = new AWS.DynamoDB.DocumentClient();
           exports.handler = function(event, context) {
+              console.log("EVENT: ")
               console.log(JSON.stringify(event,null,2));
               var params = {
                 TableName: event.ResourceProperties.DynamoTableName,
@@ -186,8 +187,7 @@ Resources:
           });
           };
       Handler: index.handler
-      Role:
-        Fn::GetAtt: [ LambdaRole , "Arn" ]
+      Role: !GetAtt LambdaRole.Arn
       Runtime: nodejs12.x
       Timeout: 60
       Tags:
@@ -198,8 +198,7 @@ Resources:
     Type: Custom::InitFunction
     DependsOn: DDBTable
     Properties:
-      ServiceToken:
-        Fn::GetAtt: [ InitFunction , "Arn" ]
+      ServiceToken: !GetAtt InitFunction.Arn
       DynamoTableName: !Ref DDBTable
 
 Outputs:
