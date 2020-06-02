@@ -148,14 +148,14 @@ Resources:
             - Effect: Allow
               Action:
               - dynamodb:*
-              Resource: "*"
-                #     !Join 
-                # - ''
-                # - - 'arn:aws:dynamodb:'
-                #   - !Ref AWS::Region
-                #   - !Ref AWS::AccountId
-                #   - ':table/'
-                #   - !Ref DDBTable
+              Resource: !Join 
+                - ''
+                - - 'arn:aws:dynamodb:'
+                  - !Ref AWS::Region
+                  - ':'
+                  - !Ref AWS::AccountId
+                  - ':table/'
+                  - !Ref DDBTable
             - Effect: Allow
               Action:
               - logs:*
@@ -222,6 +222,7 @@ Outputs:
       - ''
       - - 'arn:aws:dynamodb:'
         - !Ref AWS::Region
+        - ':'
         - !Ref AWS::AccountId
         - ':table/'
         - !Ref DDBTable
