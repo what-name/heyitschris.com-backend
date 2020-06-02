@@ -194,14 +194,14 @@ Resources:
         - Key: CostCenter
           Value: heyitschris.com
 
-  # InitializeDynamoDB:
-  #   Type: Custom::InitFunction
-  #   DependsOn: DDBTable
-  #   Properties:
-  #     ServiceToken:
-  #        Fn::GetAtt: [ InitFunction , "Arn" ]
-  #     DynamoTableName:
-  #       Ref: DDBTable
+  InitializeDynamoDB:
+    Type: Custom::InitFunction
+    DependsOn: DDBTable
+    Properties:
+      ServiceToken:
+        Fn::GetAtt: [ InitFunction , "Arn" ]
+      DynamoTableName:
+        !Ref DDBTable
 
 Outputs:
   # DEPRECATED
