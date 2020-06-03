@@ -188,7 +188,7 @@ Resources:
               )
               print("Response visitor count: ", response["Attributes"]["amount"])
               apiResponse = {
-                  "isBase64Encoded": false,
+                  "isBase64Encoded": "false",
                   "statusCode": 200,
                   "headers": {},
                   "body": {
