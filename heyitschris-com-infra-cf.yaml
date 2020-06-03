@@ -15,7 +15,7 @@ Resources:
       BucketName:
         Ref: S3BucketName
       WebsiteConfiguration:
-        IndexDocument: index.html 
+        IndexDocument: index.html
       CorsConfiguration:
         CorsRules:
           - 
@@ -194,10 +194,54 @@ Resources:
       Handler: index.handler
       Role: !GetAtt LambdaRole.Arn
       Runtime: python3.6
+      MemorySize: 128
       Timeout: 2
       Tags:
         - Key: CostCenter
           Value: heyitschris.com
+
+  # API Gateway
+  VisitorCounterAPIGateway:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: VisitorCounterAPI
+      Description: The API for the Lambda function that retrieves and updates the current visitor count
+      EndpointConfiguration:
+        Types:
+          - EDGE
+      Tags:
+        - Key: CostCenter
+          Value: heyitschris.com
+
+  VisitorCounterAPIGatewayRootMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: GET
+      Integration:
+        IntegrationHttpMethod: GET
+        Type: AWS_PROXY
+        Uri: !Sub
+          - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations
+          - lambdaArn: !GetAtt VisitorCountLambda.Arn
+      ResourceId: !GetAtt VisitorCounterAPIGateway.RootResourceId
+      RestApiId: !Ref VisitorCounterAPIGateway
+
+  VisitorCounterAPIGatewayDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - VisitorCounterAPIGatewayRootMethod
+    Properties:
+      RestApiId: !Ref VisitorCounterAPIGateway
+      StageName: prod # not clean, but it'll do now
+
+  VisitorCounterLambdaApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt VisitorCountLambda.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${VisitorCounterAPIGateway}/*/POST/
 
   # This initialization function always fails to create. ignoring and solving it manually...
   # InitializeDynamoDB:
@@ -216,6 +260,9 @@ Outputs:
           - CloudFrontDistribution
           - DomainName
     Description: HTTPS Access point
+  apiGatewayInvokeURL:
+    Value: !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
+  # These are for debugging purposes
   DEBUGDynamoDBTableRefPsuedoParam:
     Value: !Ref DDBTable
   DEBUGLambdaPolicyResourceARN:
