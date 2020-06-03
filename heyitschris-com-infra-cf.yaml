@@ -189,7 +189,9 @@ Resources:
               print("Response visitor count: ", response["Attributes"]["amount"])
               return {
                   "statusCode": 200,
-                  "visitorCount": response["Attributes"]["amount"]
+                  "body": {
+                    "visitorCount": response["Attributes"]["amount"]
+                  }
               }
       Handler: index.handler
       Role: !GetAtt LambdaRole.Arn
