@@ -187,12 +187,15 @@ Resources:
                   ReturnValues="UPDATED_NEW"
               )
               print("Response visitor count: ", response["Attributes"]["amount"])
-              return {
+              var response = {
+                  "isBase64Encoded": false,
                   "statusCode": 200,
+                  "headers": {},
                   "body": {
                     "visitorCount": response["Attributes"]["amount"]
                   }
               }
+              return response
       Handler: index.handler
       Role: !GetAtt LambdaRole.Arn
       Runtime: python3.6
