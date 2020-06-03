@@ -233,7 +233,7 @@ Resources:
       - VisitorCounterAPIGatewayRootMethod
     Properties:
       RestApiId: !Ref VisitorCounterAPIGateway
-      StageName: v1 # not clean, but it'll do now
+      StageName: prod # not clean, but it'll do now
 
   VisitorCounterLambdaApiGatewayInvoke:
     Type: AWS::Lambda::Permission
