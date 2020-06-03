@@ -188,12 +188,11 @@ Resources:
               )
               print("Response visitor count: ", response["Attributes"]["amount"])
               apiResponse = {
-                  "isBase64Encoded": "false",
+                  "isBase64Encoded": False,
                   "statusCode": 200,
-                  "headers": {},
-                  "body": {
-                    "visitorCount": response["Attributes"]["amount"]
-                  }
+                  "body": json.dumps({
+                      "visitorCount": int(float(response["Attributes"]["amount"]))
+                  })
               }
               return apiResponse
       Handler: index.handler
