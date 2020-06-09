@@ -255,6 +255,20 @@ Resources:
   #     ServiceToken: !GetAtt InitFunction.Arn
   #     DynamoTableName: !Ref DDBTable
 
+  HeyitschrisComCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: 
+        - heyitschris.com
+        - "*.heyitschris.com"
+      DomainValidationOptions:
+            - DomainName: heyitschris.com
+              ValidationDomain: heyitschris.com
+      ValidationMethod: EMAIL
+      Tags:
+        - Key: CostCenter
+          Value: heyitschris.com
+
 Outputs:
   CloudFrontURL:
     Value: !Join 

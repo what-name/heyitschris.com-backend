@@ -18,36 +18,27 @@ import json
 import boto3
 import os
 
-# Define environment variables
-table_env_variable = os.environ['table']
-
-# Define resource for DynamoDB
 dynamodb = boto3.resource('dynamodb')
-# Define table
-# Make sure to define the environment variable in your Lambda function
-# The execution will fail if not. You can also edit the code to hardcode your table
-table = dynamodb.Table(table_env_variable)
+ddbTableName = os.environ['databaseName']
+table = dynamodb.Table(ddbTableName)
 
-def lambda_handler(event, context):
-    # Update the item
+def handler(event, context):
     response = table.update_item(
-        # Find the item based on the Primary Key
         Key={
             "id": "visitorCount"
         },
-        # "Set" update expression
         UpdateExpression='SET amount = amount + :inc',
-        # Define the attribute values
         ExpressionAttributeValues={
             ':inc': 1
         },
-        # Return values - no idea what this means lol
         ReturnValues="UPDATED_NEW"
     )
-    # Print the result for safe measure, can be commented out in prod
     print("Response visitor count: ", response["Attributes"]["amount"])
-    # Return visitor count from response object
-    return {
+    apiResponse = {
+        "isBase64Encoded": False,
         "statusCode": 200,
-        "visitorCount": response["Attributes"]["amount"]
+        "body": json.dumps({
+            "visitorCount": int(float(response["Attributes"]["amount"]))
+        })
     }
+    return apiResponse
