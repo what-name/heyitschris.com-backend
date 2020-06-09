@@ -91,9 +91,9 @@ Resources:
         #   IncludeCookies: 'false'
         #   Bucket: !Ref LogsBucket
         #   Prefix: CloudFrontLogs
-        Aliases:
-          - heyitschris.com
-          - www.heyitschris.com
+        # Aliases:
+        #   - heyitschris.com
+        #   - www.heyitschris.com
         DefaultCacheBehavior:
           AllowedMethods:
           - HEAD
@@ -266,6 +266,17 @@ Resources:
       Tags:
         - Key: CostCenter
           Value: heyitschris.com
+
+  HostedZone: 
+    Type: "AWS::Route53::HostedZone"
+    Properties: 
+      HostedZoneConfig: 
+        Comment: 'Heyitschris.com hosted zone migrated from main account'
+      Name: heyitschris.com
+      HostedZoneTags: 
+        - 
+          Key: 'CostCenter'
+          Value: 'heyitschris.com'
 
 Outputs:
   CloudFrontURL:
