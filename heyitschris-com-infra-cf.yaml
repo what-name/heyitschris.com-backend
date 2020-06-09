@@ -260,7 +260,7 @@ Resources:
     Properties:
       DomainName: "*.heyitschris.com"
       DomainValidationOptions:
-            - DomainName: heyitschris.com
+            - DomainName: "*.heyitschris.com"
               ValidationDomain: heyitschris.com
       ValidationMethod: EMAIL
       Tags:
