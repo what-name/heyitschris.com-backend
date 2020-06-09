@@ -29,16 +29,16 @@ Resources:
         - Key: CostCenter
           Value: heyitschris.com
 
-  LogsBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Join 
-        - ''
-        - - 'logs-'
-          - !Ref WebsiteBucket
-      Tags:
-        - Key: CostCenter
-          Value: heyitschris.com
+  # LogsBucket:
+  #   Type: AWS::S3::Bucket
+  #   Properties:
+  #     BucketName: !Join 
+  #       - ''
+  #       - - 'logs-'
+  #         - !Ref WebsiteBucket
+  #     Tags:
+  #       - Key: CostCenter
+  #         Value: heyitschris.com
 
   WebsiteBucketBucketPolicy:
       Type: AWS::S3::BucketPolicy
@@ -71,6 +71,8 @@ Resources:
             - !Ref WebsiteBucket
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
+    DependsOn:
+      - HeyitschrisComCertificate
     Properties:
       DistributionConfig:
         Origins:
@@ -91,9 +93,9 @@ Resources:
         #   IncludeCookies: 'false'
         #   Bucket: !Ref LogsBucket
         #   Prefix: CloudFrontLogs
-        # Aliases:
-        #   - heyitschris.com
-        #   - www.heyitschris.com
+        Aliases:
+          - heyitschris.com
+          - www.heyitschris.com
         DefaultCacheBehavior:
           AllowedMethods:
           - HEAD
@@ -107,7 +109,8 @@ Resources:
           ViewerProtocolPolicy: redirect-to-https
         PriceClass: PriceClass_100
         ViewerCertificate:
-          CloudFrontDefaultCertificate: 'true'
+          AcmCertificateArn: !Ref HeyitschrisComCertificate
+          SslSupportMethod: sni-only
 
   DDBTable:
     Type: AWS::DynamoDB::Table
@@ -247,7 +250,7 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${VisitorCounterAPIGateway}/*/GET/
 
-  # This initialization function always fails to create. ignoring and solving it manually...
+  # This initialization function always fails to create. ignoring and solving it manually for now...
   # InitializeDynamoDB:
   #   Type: Custom::InitFunction
   #   DependsOn: DDBTable
@@ -255,6 +258,7 @@ Resources:
   #     ServiceToken: !GetAtt InitFunction.Arn
   #     DynamoTableName: !Ref DDBTable
 
+  ## ACM Certificate for heyitschris.com
   HeyitschrisComCertificate:
     Type: AWS::CertificateManager::Certificate
     Properties:
@@ -267,6 +271,8 @@ Resources:
         - Key: CostCenter
           Value: heyitschris.com
 
+  
+  ## Heyitschris.com Hosted Zone and Records
   HostedZone: 
     Type: "AWS::Route53::HostedZone"
     Properties: 
@@ -277,6 +283,19 @@ Resources:
         - 
           Key: 'CostCenter'
           Value: 'heyitschris.com'
+
+  DNSRecordCloudFront:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : !Ref HostedZone
+      Name: heyitschris.com
+      AliasTarget:
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        EvaluateTargetHealth: false
+        HostedZoneId: !Ref HostedZone
+      TTL: '300'
+      Type: A
+
 
 Outputs:
   CloudFrontURL:
