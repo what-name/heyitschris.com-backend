@@ -258,9 +258,7 @@ Resources:
   HeyitschrisComCertificate:
     Type: AWS::CertificateManager::Certificate
     Properties:
-      DomainName: 
-        - heyitschris.com
-        - "*.heyitschris.com"
+      DomainName: "*.heyitschris.com"
       DomainValidationOptions:
             - DomainName: heyitschris.com
               ValidationDomain: heyitschris.com
