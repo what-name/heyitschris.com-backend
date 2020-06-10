@@ -339,6 +339,7 @@ Resources:
       Type: TXT
       TTL: 300
       ResourceRecords:
+        # IMPORTANT the email-verify value is unique, comes from the Migadu account
         - "\"hosted-email-verify=50mksqoi\""
         - "\"v=spf1 include:spf.migadu.com -all\""
   
@@ -352,6 +353,83 @@ Resources:
       TTL: 300
       ResourceRecords:
         - "\"v=DMARC1; p=reject;\""
+
+  ## Domainkey1 Record for Migadu verification
+  DNSRecordHeyitschrisDmarc:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : !Ref HostedZone
+      Name: !Sub "key1._domainkey.${WebsiteDomainName}"
+      Type: CNAME
+      TTL: 300
+      ResourceRecords:
+        - !Sub "key1.${WebsiteDomainName}._domainkey.migadu.com."
+
+  ## Domainkey2 Record for Migadu verification
+  DNSRecordHeyitschrisDmarc:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : !Ref HostedZone
+      Name: !Sub "key2._domainkey.${WebsiteDomainName}"
+      Type: CNAME
+      TTL: 300
+      ResourceRecords:
+        - !Sub "key2.${WebsiteDomainName}._domainkey.migadu.com."
+
+  ## Domainkey3 Record for Migadu verification
+  DNSRecordHeyitschrisDmarc:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : !Ref HostedZone
+      Name: !Sub "key3._domainkey.${WebsiteDomainName}"
+      Type: CNAME
+      TTL: 300
+      ResourceRecords:
+        - !Sub "key3.${WebsiteDomainName}._domainkey.migadu.com."
+
+  ## Imaps Record for Migadu verification
+  DNSRecordHeyitschrisDmarc:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : !Ref HostedZone
+      Name: !Sub "_imaps._tcp.${WebsiteDomainName}"
+      Type: SRV
+      TTL: 300
+      ResourceRecords:
+        - "0 1 993 imap.migadu.com."
+
+  ## SMTP Record for Migadu verification
+  DNSRecordHeyitschrisDmarc:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : !Ref HostedZone
+      Name: !Sub "_submissions._tcp.${WebsiteDomainName}"
+      Type: SRV
+      TTL: 300
+      ResourceRecords:
+        - "0 1 465 smtp.migadu.com."
+
+  ## Autoconfig Record for Migadu verification
+  DNSRecordHeyitschrisDmarc:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : !Ref HostedZone
+      Name: !Sub "autoconfig.${WebsiteDomainName}"
+      Type: CNAME
+      TTL: 300
+      ResourceRecords:
+        - "autoconfig.migadu.com."
+
+  ## Autodiscover Record for Migadu verification
+  DNSRecordHeyitschrisDmarc:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : !Ref HostedZone
+      Name: !Sub "autodiscover.${WebsiteDomainName}"
+      Type: CNAME
+      TTL: 300
+      ResourceRecords:
+        - "autodiscover.migadu.com."
 
 Outputs:
   CloudFrontURL:
