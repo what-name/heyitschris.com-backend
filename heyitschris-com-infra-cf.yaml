@@ -355,7 +355,7 @@ Resources:
         - "\"v=DMARC1; p=reject;\""
 
   ## Domainkey1 Record for Migadu verification
-  DNSRecordHeyitschrisDmarc:
+  DNSRecordHeyitschrisDomainKey1:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneId : !Ref HostedZone
@@ -366,7 +366,7 @@ Resources:
         - !Sub "key1.${WebsiteDomainName}._domainkey.migadu.com."
 
   ## Domainkey2 Record for Migadu verification
-  DNSRecordHeyitschrisDmarc:
+  DNSRecordHeyitschrisDomainKey2:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneId : !Ref HostedZone
@@ -377,7 +377,7 @@ Resources:
         - !Sub "key2.${WebsiteDomainName}._domainkey.migadu.com."
 
   ## Domainkey3 Record for Migadu verification
-  DNSRecordHeyitschrisDmarc:
+  DNSRecordHeyitschrisDomainKey3:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneId : !Ref HostedZone
@@ -388,7 +388,7 @@ Resources:
         - !Sub "key3.${WebsiteDomainName}._domainkey.migadu.com."
 
   ## Imaps Record for Migadu verification
-  DNSRecordHeyitschrisDmarc:
+  DNSRecordHeyitschrisImaps:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneId : !Ref HostedZone
@@ -399,7 +399,7 @@ Resources:
         - "0 1 993 imap.migadu.com."
 
   ## SMTP Record for Migadu verification
-  DNSRecordHeyitschrisDmarc:
+  DNSRecordHeyitschrisSMTP:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneId : !Ref HostedZone
@@ -410,7 +410,7 @@ Resources:
         - "0 1 465 smtp.migadu.com."
 
   ## Autoconfig Record for Migadu verification
-  DNSRecordHeyitschrisDmarc:
+  DNSRecordHeyitschrisAutoconfig:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneId : !Ref HostedZone
@@ -421,7 +421,7 @@ Resources:
         - "autoconfig.migadu.com."
 
   ## Autodiscover Record for Migadu verification
-  DNSRecordHeyitschrisDmarc:
+  DNSRecordHeyitschrisAutodiscover:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneId : !Ref HostedZone
