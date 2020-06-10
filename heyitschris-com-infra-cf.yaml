@@ -421,15 +421,15 @@ Resources:
         - "autoconfig.migadu.com."
 
   ## Autodiscover Record for Migadu verification
-  DNSRecordHeyitschrisAutodiscover:
-    Type: AWS::Route53::RecordSet
-    Properties:
-      HostedZoneId : !Ref HostedZone
-      Name: !Sub "autodiscover.${WebsiteDomainName}"
-      Type: CNAME
-      TTL: 300
-      ResourceRecords:
-        - "autodiscover.migadu.com."
+  # DNSRecordHeyitschrisDmarc:
+  #   Type: AWS::Route53::RecordSet
+  #   Properties:
+  #     HostedZoneId : !Ref HostedZone
+  #     Name: !Sub "autodiscover.${WebsiteDomainName}"
+  #     Type: CNAME
+  #     TTL: 300
+  #     ResourceRecords:
+  #       - "autodiscover.migadu.com."
 
 Outputs:
   CloudFrontURL:
