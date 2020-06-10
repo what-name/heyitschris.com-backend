@@ -307,16 +307,16 @@ Resources:
           Value: 'heyitschris.com'
 
   ## APIGateway Alias DNS record
-  # DNSRecordAPIGateway:
-  #   Type: AWS::Route53::RecordSet
-  #   Properties:
-  #     HostedZoneId : !Ref HostedZone
-  #     Name: api.heyitschris.com
-  #     AliasTarget:
-  #       DNSName: !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
-  #       EvaluateTargetHealth: false
-  #       HostedZoneId: !Ref HostedZone
-  #     Type: A
+  DNSRecordAPIGateway:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : !Ref HostedZone
+      Name: api.heyitschris.com
+      AliasTarget:
+        DNSName: !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
+        EvaluateTargetHealth: false
+        HostedZoneId: !Ref HostedZone
+      Type: A
 
   ## MX Record
   DNSRecordHeyitschrisMX:
