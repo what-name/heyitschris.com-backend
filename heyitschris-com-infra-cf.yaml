@@ -309,7 +309,6 @@ Resources:
         DNSName: !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
         EvaluateTargetHealth: false
         HostedZoneId: !Ref HostedZone
-      TTL: '300'
       Type: A
 
 
