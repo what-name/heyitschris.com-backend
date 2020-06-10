@@ -300,7 +300,7 @@ Resources:
     Properties: 
       HostedZoneConfig: 
         Comment: 'Heyitschris.com hosted zone migrated from main account'
-      Name: heyitschris.com
+      Name: !Ref WebsiteDomainName
       HostedZoneTags: 
         - 
           Key: 'CostCenter'
@@ -318,17 +318,40 @@ Resources:
   #       HostedZoneId: !Ref HostedZone
   #     Type: A
 
-  ## APIGateway Alias DNS record
+  ## MX Record
   DNSRecordHeyitschrisMX:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneId : !Ref HostedZone
-      Name: heyitschris.com
+      Name: !Ref WebsiteDomainName
       Type: MX
       TTL: 300
       ResourceRecords:
         - "10 aspmx1.migadu.com"
         - "20 aspmx2.migadu.com"
+
+  ## TXT Record for Migadu verification
+  DNSRecordHeyitschrisTXT1:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : !Ref HostedZone
+      Name: !Ref WebsiteDomainName
+      Type: TXT
+      TTL: 300
+      ResourceRecords:
+        - "\"hosted-email-verify=50mksqoi\""
+        - "\"v=spf1 include:spf.migadu.com -all\""
+  
+  ## _Dmarc Record for Migadu verification
+  DNSRecordHeyitschrisDmarc:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : !Ref HostedZone
+      Name: !Sub "_dmarc.${WebsiteDomainName}"
+      Type: TXT
+      TTL: 300
+      ResourceRecords:
+        - "\"v=DMARC1; p=reject;\""
 
 Outputs:
   CloudFrontURL:
