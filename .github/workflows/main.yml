@@ -12,7 +12,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
     - name: Update Cloudformation Stack
-      run: aws cloudformation create-stack
+      run: aws cloudformation update-stack
         --stack-name heyitschris-com-infra
         --template-body file://heyitschris-com-infra-cf.yaml
         --parameters ParameterKey=S3BucketName,ParameterValue=heyitschris-com ParameterKey=DynamoDBTableName,ParameterValue=heyitschris.com

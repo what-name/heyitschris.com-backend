@@ -273,17 +273,17 @@ Resources:
   #     DynamoTableName: !Ref DDBTable
 
   # ACM Certificate for heyitschris.com
-  # HeyitschrisComCertificate:
-  #   Type: AWS::CertificateManager::Certificate
-  #   Properties:
-  #     DomainName: "*.heyitschris.com"
-  #     DomainValidationOptions:
-  #           - DomainName: "*.heyitschris.com"
-  #             ValidationDomain: heyitschris.com
-  #     ValidationMethod: EMAIL
-  #     Tags:
-  #       - Key: CostCenter
-  #         Value: heyitschris.com
+  HeyitschrisComCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: heyitschris.com
+      DomainValidationOptions:
+            - DomainName: heyitschris.com
+              ValidationDomain: heyitschris.com
+      ValidationMethod: EMAIL
+      Tags:
+        - Key: CostCenter
+          Value: heyitschris.com
 
   
   # Route53
