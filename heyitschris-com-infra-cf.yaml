@@ -312,11 +312,9 @@ Resources:
     Properties:
       HostedZoneId : !Ref HostedZone
       Name: api.heyitschris.com
-      AliasTarget:
-        DNSName: !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
-        EvaluateTargetHealth: false
-        HostedZoneId: !Ref HostedZone
-      Type: A
+      ResourceRecords:
+        - !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
+      Type: CNAME
 
   ## MX Record
   DNSRecordHeyitschrisMX:
