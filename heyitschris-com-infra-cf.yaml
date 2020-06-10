@@ -7,6 +7,13 @@ Parameters:
   DynamoDBTableName:
     Description: "The name of the DynamoDB table for the visitor count"
     Type: String
+  WebsiteDomainName:
+    Description: "The name of the website this stack will be deployed for"
+    Type: String
+    Default: mydomain.com
+    # ConstraintDescription: "Only valid domain names allowed"
+    # AllowedPattern: "/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/"
+
 
 Resources:
 
@@ -299,18 +306,29 @@ Resources:
           Key: 'CostCenter'
           Value: 'heyitschris.com'
 
-  ## CloudFront Alias DNS record
-  DNSRecordCloudFront:
+  ## APIGateway Alias DNS record
+  # DNSRecordAPIGateway:
+  #   Type: AWS::Route53::RecordSet
+  #   Properties:
+  #     HostedZoneId : !Ref HostedZone
+  #     Name: api.heyitschris.com
+  #     AliasTarget:
+  #       DNSName: !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
+  #       EvaluateTargetHealth: false
+  #       HostedZoneId: !Ref HostedZone
+  #     Type: A
+
+  ## APIGateway Alias DNS record
+  DNSRecordHeyitschrisMX:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneId : !Ref HostedZone
-      Name: api.heyitschris.com
-      AliasTarget:
-        DNSName: !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
-        EvaluateTargetHealth: false
-        HostedZoneId: !Ref HostedZone
-      Type: A
-
+      Name: heyitschris.com
+      Type: MX
+      TTL: 300
+      ResourceRecords:
+        - "10 aspmx1.migadu.com"
+        - "20 aspmx2.migadu.com"
 
 Outputs:
   CloudFrontURL:
