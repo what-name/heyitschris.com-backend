@@ -79,8 +79,8 @@ Resources:
   ## Cloudfront distribution
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
-    DependsOn:
-      - HeyitschrisComCertificate
+    # DependsOn:
+    #   - HeyitschrisComCertificate
     Properties:
       DistributionConfig:
         Origins:
