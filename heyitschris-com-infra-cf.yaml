@@ -37,7 +37,7 @@ Resources:
               - "*"
       Tags:
         - Key: CostCenter
-          Value: heyitschris.com
+          Value: !Sub "${WebsiteDomainName}"
 
   # LogsBucket:
   #   Type: AWS::S3::Bucket
@@ -48,7 +48,7 @@ Resources:
   #         - !Ref WebsiteBucket
   #     Tags:
   #       - Key: CostCenter
-  #         Value: heyitschris.com
+  #         Value: !Sub "${WebsiteDomainName}"
 
   ## Bucket policy of the static website hosting bucket
   WebsiteBucketBucketPolicy:
@@ -226,7 +226,7 @@ Resources:
       Timeout: 2
       Tags:
         - Key: CostCenter
-          Value: heyitschris.com
+          Value: !Sub "${WebsiteDomainName}"
 
   # API Gateway
   VisitorCounterAPIGateway:
@@ -239,7 +239,7 @@ Resources:
           - EDGE
       Tags:
         - Key: CostCenter
-          Value: heyitschris.com
+          Value: !Sub "${WebsiteDomainName}"
 
   VisitorCounterAPIGatewayRootMethod:
     Type: AWS::ApiGateway::Method
@@ -290,7 +290,7 @@ Resources:
       ValidationMethod: EMAIL
       Tags:
         - Key: CostCenter
-          Value: heyitschris.com
+          Value: !Sub "${WebsiteDomainName}"
 
   
   # Route53
@@ -304,7 +304,7 @@ Resources:
       HostedZoneTags: 
         - 
           Key: 'CostCenter'
-          Value: 'heyitschris.com'
+          Value: !Sub "${WebsiteDomainName}"
 
   ## APIGateway Alias DNS record
   DNSRecordAPIGateway:
