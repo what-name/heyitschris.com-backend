@@ -101,9 +101,8 @@ Resources:
         #   IncludeCookies: 'false'
         #   Bucket: !Ref LogsBucket
         #   Prefix: CloudFrontLogs
-        # Aliases:
-        #   - heyitschris.com
-        #   - www.heyitschris.com
+        Aliases:
+          - heyitschris.com
         DefaultCacheBehavior:
           AllowedMethods:
           - HEAD
@@ -117,9 +116,8 @@ Resources:
           ViewerProtocolPolicy: redirect-to-https
         PriceClass: PriceClass_100
         ViewerCertificate:
-          CloudFrontDefaultCertificate: true
-          # AcmCertificateArn: !Ref HeyitschrisComCertificate
-          # SslSupportMethod: sni-only
+          AcmCertificateArn: !Ref HeyitschrisComCertificate
+          SslSupportMethod: sni-only
 
   # Visiton Counter Part
   ## DynamoDB Table - FIXME need to manually input item for the first time
