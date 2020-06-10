@@ -101,8 +101,10 @@ Resources:
         #   IncludeCookies: 'false'
         #   Bucket: !Ref LogsBucket
         #   Prefix: CloudFrontLogs
-        Aliases:
-          - heyitschris.com
+        
+        ## AWS support case ID: 7084271721 - parent account
+        # Aliases:
+        #   - heyitschris.com
         DefaultCacheBehavior:
           AllowedMethods:
           - HEAD
@@ -298,17 +300,17 @@ Resources:
           Value: 'heyitschris.com'
 
   ## CloudFront Alias DNS record
-  # DNSRecordCloudFront:
-  #   Type: AWS::Route53::RecordSet
-  #   Properties:
-  #     HostedZoneId : !Ref HostedZone
-  #     Name: heyitschris.com
-  #     AliasTarget:
-  #       DNSName: !GetAtt CloudFrontDistribution.DomainName
-  #       EvaluateTargetHealth: false
-  #       HostedZoneId: !Ref HostedZone
-  #     TTL: '300'
-  #     Type: A
+  DNSRecordCloudFront:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : !Ref HostedZone
+      Name: api.heyitschris.com
+      AliasTarget:
+        DNSName: !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
+        EvaluateTargetHealth: false
+        HostedZoneId: !Ref HostedZone
+      TTL: '300'
+      Type: A
 
 
 Outputs:
