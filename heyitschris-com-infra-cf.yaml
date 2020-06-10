@@ -9,6 +9,9 @@ Parameters:
     Type: String
 
 Resources:
+
+  # S3
+  ## Static site hosting bucket
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -40,6 +43,7 @@ Resources:
   #       - Key: CostCenter
   #         Value: heyitschris.com
 
+  ## Bucket policy of the static website hosting bucket
   WebsiteBucketBucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
@@ -61,6 +65,8 @@ Resources:
                   - /*
         Bucket: !Ref WebsiteBucket
   
+  # CloudFront
+  ## CloudFront OAI for the bucket policy
   CloudFrontOAI:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties: 
@@ -69,6 +75,8 @@ Resources:
           - ''
           - - 'The OAI for the bucket: '
             - !Ref WebsiteBucket
+
+  ## Cloudfront distribution
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
     DependsOn:
@@ -93,9 +101,9 @@ Resources:
         #   IncludeCookies: 'false'
         #   Bucket: !Ref LogsBucket
         #   Prefix: CloudFrontLogs
-        Aliases:
-          - heyitschris.com
-          - www.heyitschris.com
+        # Aliases:
+        #   - heyitschris.com
+        #   - www.heyitschris.com
         DefaultCacheBehavior:
           AllowedMethods:
           - HEAD
@@ -109,9 +117,13 @@ Resources:
           ViewerProtocolPolicy: redirect-to-https
         PriceClass: PriceClass_100
         ViewerCertificate:
-          AcmCertificateArn: !Ref HeyitschrisComCertificate
-          SslSupportMethod: sni-only
+          CloudFrontDefaultCertificate: true
+          # AcmCertificateArn: !Ref HeyitschrisComCertificate
+          # SslSupportMethod: sni-only
 
+  # Visiton Counter Part
+  ## DynamoDB Table - FIXME need to manually input item for the first time
+  ## FORMAT: id: visitorCount, amount: 0
   DDBTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -127,6 +139,7 @@ Resources:
           KeyType: "HASH"
       BillingMode: PAY_PER_REQUEST
   
+  ## Lambda role to access visitorCount in DynamoDB
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
@@ -161,6 +174,7 @@ Resources:
               - logs:*
               Resource: "*"
 
+  ## Lambda function to retrieve visitorCount from DynamoDB
   VisitorCountLambda:
     Type: AWS::Lambda::Function
     Description: This function retrieves and updates the visitor count in the DynamoDB database.
@@ -258,21 +272,22 @@ Resources:
   #     ServiceToken: !GetAtt InitFunction.Arn
   #     DynamoTableName: !Ref DDBTable
 
-  ## ACM Certificate for heyitschris.com
-  HeyitschrisComCertificate:
-    Type: AWS::CertificateManager::Certificate
-    Properties:
-      DomainName: "*.heyitschris.com"
-      DomainValidationOptions:
-            - DomainName: "*.heyitschris.com"
-              ValidationDomain: heyitschris.com
-      ValidationMethod: EMAIL
-      Tags:
-        - Key: CostCenter
-          Value: heyitschris.com
+  # ACM Certificate for heyitschris.com
+  # HeyitschrisComCertificate:
+  #   Type: AWS::CertificateManager::Certificate
+  #   Properties:
+  #     DomainName: "*.heyitschris.com"
+  #     DomainValidationOptions:
+  #           - DomainName: "*.heyitschris.com"
+  #             ValidationDomain: heyitschris.com
+  #     ValidationMethod: EMAIL
+  #     Tags:
+  #       - Key: CostCenter
+  #         Value: heyitschris.com
 
   
-  ## Heyitschris.com Hosted Zone and Records
+  # Route53
+  ## Heyitschris.com Hosted Zone
   HostedZone: 
     Type: "AWS::Route53::HostedZone"
     Properties: 
@@ -284,17 +299,18 @@ Resources:
           Key: 'CostCenter'
           Value: 'heyitschris.com'
 
-  DNSRecordCloudFront:
-    Type: AWS::Route53::RecordSet
-    Properties:
-      HostedZoneId : !Ref HostedZone
-      Name: heyitschris.com
-      AliasTarget:
-        DNSName: !GetAtt CloudFrontDistribution.DomainName
-        EvaluateTargetHealth: false
-        HostedZoneId: !Ref HostedZone
-      TTL: '300'
-      Type: A
+  ## CloudFront Alias DNS record
+  # DNSRecordCloudFront:
+  #   Type: AWS::Route53::RecordSet
+  #   Properties:
+  #     HostedZoneId : !Ref HostedZone
+  #     Name: heyitschris.com
+  #     AliasTarget:
+  #       DNSName: !GetAtt CloudFrontDistribution.DomainName
+  #       EvaluateTargetHealth: false
+  #       HostedZoneId: !Ref HostedZone
+  #     TTL: '300'
+  #     Type: A
 
 
 Outputs:
