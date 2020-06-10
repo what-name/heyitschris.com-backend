@@ -312,6 +312,7 @@ Resources:
     Properties:
       HostedZoneId : !Ref HostedZone
       Name: api.heyitschris.com
+      TTL: 300
       ResourceRecords:
         - !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
       Type: CNAME
