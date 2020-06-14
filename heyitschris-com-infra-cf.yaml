@@ -110,8 +110,8 @@ Resources:
         #   Prefix: CloudFrontLogs
         
         ## AWS support case ID: 7084271721 - parent account
-        # Aliases:
-        #   - heyitschris.com
+        Aliases:
+          - heyitschris.com
         DefaultCacheBehavior:
           AllowedMethods:
           - HEAD
