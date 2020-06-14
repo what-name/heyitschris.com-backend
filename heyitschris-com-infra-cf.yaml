@@ -312,12 +312,13 @@ Resources:
   HeyitschrisComCertificate:
     Type: AWS::CertificateManager::Certificate
     Properties:
-      DomainName: heyitschris.com
+      DomainName: !Sub "*.${WebsiteDomainName}"
+      SubjectAlternativeNames:
+        - !Ref WebsiteDomainName
+        - !Sub "*.${WebsiteDomainName}"
       DomainValidationOptions:
-            - DomainName: heyitschris.com
-              ValidationDomain: heyitschris.com
-            - DomainName: "*.heyitschris.com"
-              ValidationDomain: heyitschris.com
+        - DomainName: !Ref WebsiteDomainName
+          ValidationDomain: !Ref WebsiteDomainName
       ValidationMethod: EMAIL
       Tags:
         - Key: CostCenter
