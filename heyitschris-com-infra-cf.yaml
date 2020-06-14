@@ -236,7 +236,7 @@ Resources:
       Description: The API for the Lambda function that retrieves and updates the current visitor count
       EndpointConfiguration:
         Types:
-          - EDGE
+          - REGIONAL
       Tags:
         - Key: CostCenter
           Value: !Sub "${WebsiteDomainName}"
