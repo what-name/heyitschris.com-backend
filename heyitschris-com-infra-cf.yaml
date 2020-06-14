@@ -315,7 +315,7 @@ Resources:
       HostedZoneId: !Ref HostedZone
       AliasTarget:
         DNSName: !GetAtt CloudFrontDistribution.DomainName
-        HostedZoneId: String
+        HostedZoneId: Z2FDTNDATAQYW2
 
   ## APIGateway Alias DNS record
   DNSRecordAPIGateway:
