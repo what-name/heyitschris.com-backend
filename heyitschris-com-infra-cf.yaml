@@ -294,7 +294,7 @@ Resources:
 
   
   # Route53
-  ## Heyitschris.com Hosted Zone
+  ## Custom Hosted Zone
   HostedZone: 
     Type: "AWS::Route53::HostedZone"
     Properties: 
@@ -306,12 +306,23 @@ Resources:
           Key: 'CostCenter'
           Value: !Sub "${WebsiteDomainName}"
 
+  ## The main A record to redirect to the CF distribution
+  DNSRecordMain:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: !Sub "${WebsiteDomainName}"
+      Type: A
+      HostedZoneId: !Ref HostedZone
+      AliasTarget:
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        HostedZoneId: String
+
   ## APIGateway Alias DNS record
   DNSRecordAPIGateway:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneId : !Ref HostedZone
-      Name: api.heyitschris.com
+      Name: !Sub "api.${WebsiteDomainName}"
       TTL: 300
       ResourceRecords:
         - !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
