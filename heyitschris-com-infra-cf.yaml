@@ -317,6 +317,17 @@ Resources:
         DNSName: !GetAtt CloudFrontDistribution.DomainName
         HostedZoneId: Z2FDTNDATAQYW2
 
+  ## Redirect www to the main domain
+  DNSRecordMainWWWredirect:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: !Sub "www.${WebsiteDomainName}"
+      Type: A
+      HostedZoneId: !Ref HostedZone
+      AliasTarget:
+        DNSName: !Ref WebsiteDomainName
+        HostedZoneId: !Ref HostedZone
+
   ## APIGateway Alias DNS record
   DNSRecordAPIGateway:
     Type: AWS::Route53::RecordSet
