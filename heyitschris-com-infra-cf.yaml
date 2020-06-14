@@ -114,14 +114,19 @@ Resources:
           - heyitschris.com
         DefaultCacheBehavior:
           AllowedMethods:
-          - HEAD
-          - GET
-          - OPTIONS
+            - HEAD
+            - GET
+            - OPTIONS
+          CachedMethods:
+            - HEAD
+            - GET
+            - OPTIONS
           TargetOriginId: myS3Origin
           ForwardedValues:
             QueryString: 'false'
             Cookies:
-              Forward: none
+              Forward: whitelist
+              WhitelistedNames: all
           ViewerProtocolPolicy: redirect-to-https
         PriceClass: PriceClass_100
         ViewerCertificate:
