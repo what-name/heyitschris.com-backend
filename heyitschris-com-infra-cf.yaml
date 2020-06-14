@@ -39,16 +39,16 @@ Resources:
         - Key: CostCenter
           Value: !Sub "${WebsiteDomainName}"
 
-  # LogsBucket:
-  #   Type: AWS::S3::Bucket
-  #   Properties:
-  #     BucketName: !Join 
-  #       - ''
-  #       - - 'logs-'
-  #         - !Ref WebsiteBucket
-  #     Tags:
-  #       - Key: CostCenter
-  #         Value: !Sub "${WebsiteDomainName}"
+  LogsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Join 
+        - ''
+        - - 'logs-'
+          - !Ref WebsiteBucket
+      Tags:
+        - Key: CostCenter
+          Value: !Sub "${WebsiteDomainName}"
 
   ## Bucket policy of the static website hosting bucket
   WebsiteBucketBucketPolicy:
