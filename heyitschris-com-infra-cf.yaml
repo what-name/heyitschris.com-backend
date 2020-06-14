@@ -316,6 +316,8 @@ Resources:
       DomainValidationOptions:
             - DomainName: heyitschris.com
               ValidationDomain: heyitschris.com
+            - DomainName: "*.heyitschris.com"
+              ValidationDomain: heyitschris.com
       ValidationMethod: EMAIL
       Tags:
         - Key: CostCenter
