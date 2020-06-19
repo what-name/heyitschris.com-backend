@@ -125,8 +125,7 @@ Resources:
           ForwardedValues:
             QueryString: 'false'
             Cookies:
-              Forward: whitelist
-              WhitelistedNames: all
+              Forward: all
           ViewerProtocolPolicy: redirect-to-https
         PriceClass: PriceClass_100
         ViewerCertificate:
@@ -273,7 +272,7 @@ Resources:
           ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
             method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
-            method.response.header.Access-Control-Allow-Origin: "'api.heyitschris.com'"
+            method.response.header.Access-Control-Allow-Origin: "'*.heyitschris.com'"
           ResponseTemplates:
             application/json: ''
         PassthroughBehavior: WHEN_NO_MATCH
