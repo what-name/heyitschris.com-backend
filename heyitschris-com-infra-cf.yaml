@@ -363,15 +363,15 @@ Resources:
         HostedZoneId: !Ref HostedZone
 
   ## APIGateway Alias DNS record
-  DNSRecordAPIGateway:
-    Type: AWS::Route53::RecordSet
-    Properties:
-      HostedZoneId : !Ref HostedZone
-      Name: !Sub "api.${WebsiteDomainName}"
-      TTL: 300
-      ResourceRecords:
-        - !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
-      Type: CNAME
+  # DNSRecordAPIGateway:
+  #   Type: AWS::Route53::RecordSet
+  #   Properties:
+  #     HostedZoneId : !Ref HostedZone
+  #     Name: !Sub "api.${WebsiteDomainName}"
+  #     TTL: 300
+  #     ResourceRecords:
+  #       - !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
+  #     Type: CNAME
 
   ## MX Record
   DNSRecordHeyitschrisMX:
@@ -495,8 +495,8 @@ Outputs:
           - CloudFrontDistribution
           - DomainName
     Description: HTTPS Access point
-  apiGatewayInvokeURL:
-    Value: !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
+  # apiGatewayInvokeURL:
+  #   Value: !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
   # These are for debugging purposes
   DEBUGDynamoDBTableRefPsuedoParam:
     Value: !Ref DDBTable
