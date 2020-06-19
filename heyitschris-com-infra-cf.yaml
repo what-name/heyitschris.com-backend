@@ -110,7 +110,6 @@ Resources:
         #   Bucket: !Ref LogsBucket
         #   Prefix: CloudFrontLogs
         
-        ## AWS support case ID: 7084271721 - parent account
         Aliases:
           - heyitschris.com
         DefaultCacheBehavior:
@@ -125,8 +124,6 @@ Resources:
           TargetOriginId: myS3Origin
           ForwardedValues:
             QueryString: 'false'
-            Cookies:
-              Forward: all
           ViewerProtocolPolicy: redirect-to-https
         PriceClass: PriceClass_100
         ViewerCertificate:
@@ -273,7 +270,7 @@ Resources:
           ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
             method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
-            method.response.header.Access-Control-Allow-Origin: "'*.heyitschris.com'"
+            method.response.header.Access-Control-Allow-Origin: "'*'"
           ResponseTemplates:
             application/json: ''
         PassthroughBehavior: WHEN_NO_MATCH
@@ -285,9 +282,9 @@ Resources:
         ResponseModels:
           application/json: 'Empty'
         ResponseParameters:
-            method.response.header.Access-Control-Allow-Headers: false
-            method.response.header.Access-Control-Allow-Methods: false
-            method.response.header.Access-Control-Allow-Origin: false
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
 
   VisitorCounterAPIGatewayDeployment:
     Type: AWS::ApiGateway::Deployment
