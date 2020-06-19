@@ -86,8 +86,8 @@ Resources:
   ## Cloudfront distribution
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
-    # DependsOn:
-    #   - HeyitschrisComCertificate
+    DependsOn:
+      - HeyitschrisComCertificate
     Properties:
       DistributionConfig:
         Origins:
@@ -271,7 +271,7 @@ Resources:
         - StatusCode: 200
           ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-            method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+            method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
             method.response.header.Access-Control-Allow-Origin: "'*.heyitschris.com'"
           ResponseTemplates:
             application/json: ''
