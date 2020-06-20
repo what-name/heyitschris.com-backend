@@ -202,7 +202,7 @@ Resources:
           table = dynamodb.Table(ddbTableName)
 
           def handler(event, context):
-              response = table.update_item(
+              ddbResponse = table.update_item(
                   Key={
                       "id": "visitorCount"
                   },
@@ -212,13 +212,17 @@ Resources:
                   },
                   ReturnValues="UPDATED_NEW"
               )
-              print("Response visitor count: ", response["Attributes"]["amount"])
+              print("Response visitor count: ", ddbResponse["Attributes"]["amount"])
+              responseBody = json.dumps({"visitorCount": int(float(ddbResponse["Attributes"]["amount"]))})
               apiResponse = {
                   "isBase64Encoded": False,
                   "statusCode": 200,
-                  "body": json.dumps({
-                      "visitorCount": int(float(response["Attributes"]["amount"]))
-                  })
+                  "body": responseBody,
+                  headers: {
+                      "Access-Control-Allow-Headers" : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,x-requested-with'",
+                      "Access-Control-Allow-Origin": "'*'",
+                      "Access-Control-Allow-Methods": "'GET,OPTIONS'" 
+                  },
               }
               return apiResponse
       Handler: index.handler
