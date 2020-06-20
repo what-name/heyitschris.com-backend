@@ -495,8 +495,8 @@ Outputs:
           - CloudFrontDistribution
           - DomainName
     Description: HTTPS Access point
-  apiGatewayInvokeURL:
-    Value: !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
+  # apiGatewayInvokeURL:
+  #   Value: !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
   #These are for debugging purposes
   DEBUGDynamoDBTableRefPsuedoParam:
     Value: !Ref DDBTable
