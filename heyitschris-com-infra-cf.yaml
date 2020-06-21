@@ -11,8 +11,8 @@ Parameters:
     Description: "The name of the website this stack will be deployed for"
     Type: String
     Default: mydomain.com
-    # ConstraintDescription: "Only valid domain names allowed"
-    # AllowedPattern: "/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/"
+    # ConstraintDescription: Only valid domain names
+    # AllowedPattern: "\/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\\.[a-zA-Z]{2,}$"
 
 
 Resources:
@@ -103,7 +103,7 @@ Resources:
               - - 'origin-access-identity/cloudfront/'
                 - !Ref CloudFrontOAI
         Enabled: 'true'
-        Comment: This is a comment
+        Comment: Static website distribution
         DefaultRootObject: index.html
         # Logging:
         #   IncludeCookies: 'false'

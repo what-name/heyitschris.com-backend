@@ -1,0 +1,67 @@
+---
+Resources:
+  CloudFormationDeployS3StaticWebsiteRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: CloudFormationDeployS3StaticWebsiteRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - cloudformation.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+        - PolicyName: CloudFormationDeployS3StaticWebsitePolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:*
+              Resource: !Join 
+                - ''
+                - - 'arn:aws:dynamodb:'
+                  - !Ref AWS::Region
+                  - ':'
+                  - !Ref AWS::AccountId
+                  - ':table/heyitschris*'
+            - Effect: Allow
+              Action:
+                - s3:*
+              Resource: "arn:aws:s3:::heyitschris*"
+            - Effect: Allow
+              Action:
+                - cloudfront:*
+                - acm:*
+                - lambda:*
+                - apigateway:*
+                - execute-api:*
+                - route53:*
+                - route53domains:*
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - iam:CreatePolicy
+                - iam:CreatePolicyVersion
+                - iam:CreateRole
+                - iam:DeletePolicy
+                - iam:DeletePolicyVersion
+                - iam:DeleteRole
+                - iam:DeleteRolePolicy
+                - iam:GetPolicy
+                - iam:GetPolicyVersion
+                - iam:GetRole
+                - iam:GetRolePolicy
+                - iam:ListPolicies
+                - iam:ListPolicyVersions
+                - iam:ListRolePolicies
+                - iam:ListRoleTags
+                - iam:ListRoles
+                - iam:PutRolePolicy
+                - iam:SetDefaultPolicyVersion
+                - iam:TagRole
+              Resource: "*"
