@@ -1,0 +1,29 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1592783350721",
+      "Action": [
+        "cloudformation:CreateChangeSet",
+        "cloudformation:CreateStack",
+        "cloudformation:CreateUploadBucket",
+        "cloudformation:ExecuteChangeSet",
+        "cloudformation:GetStackPolicy",
+        "cloudformation:ListStacks",
+        "cloudformation:SetStackPolicy",
+        "cloudformation:UpdateStack"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:cloudformation:us-east-1:130783386804:stack/heyitschris-com-infra/*"
+    },
+    {
+      "Sid": "Stmt1592783465441",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:s3:::cf-templates*"
+    }
+  ]
+}

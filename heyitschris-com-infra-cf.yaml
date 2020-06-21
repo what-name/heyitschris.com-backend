@@ -2,7 +2,7 @@
 Parameters:
   # FIXME set input constraints for these
   S3BucketName:
-    Description: "The name of the S3 bucket that will store the website files"
+    Description: "The name of the S3 bucket that will store the static website files"
     Type: String
   DynamoDBTableName:
     Description: "The name of the DynamoDB table for the visitor count"
