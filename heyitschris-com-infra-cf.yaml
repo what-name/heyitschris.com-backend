@@ -45,8 +45,8 @@ Resources:
     Properties:
       BucketName: !Join 
         - ''
-        - - 'logs-'
-          - !Ref WebsiteBucket
+        - - !Ref WebsiteBucket
+          - '-logs'
       Tags:
         - Key: CostCenter
           Value: !Sub "${WebsiteDomainName}"
