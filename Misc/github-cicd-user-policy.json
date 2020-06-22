@@ -24,6 +24,14 @@
       ],
       "Effect": "Allow",
       "Resource": "arn:aws:s3:::cf-templates*"
+    },
+    {
+      "Sid": "IAM",
+      "Action": [
+        "iam:PassRole"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:iam::130783386804:role/CloudFormationDeployS3StaticWebsiteRole"
     }
   ]
 }
