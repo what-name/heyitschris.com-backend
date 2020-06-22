@@ -16,3 +16,11 @@ Originally the domain was bought by an AWS account that turned into an Organizat
 
 ## CI/CD Workflow
 As described in the `.github/workflows/main.yml`, there is a GitHub Actions workflow that is triggered every time there is a push to the master branch. This workflow updates the CloudFormation stack currently deployed. The AWS access keys are stored as GitHub Secrets and the user has very limited access to resources. (Upcoming) The CloudFormation template assumes a role to deploy the needed resources. This project is utilizing GitHub Actions over an AWS CodePipeline for cost savings and is a better alternative based on the scope of this project.
+
+## How to deploy
+Follow these steps to manually deploy the static website and all it's components:
+1. Deploy the `heyitschris-com-infra-cf.yaml` template with CloudFormation. Fill out the parameters to your needs.
+2. (To be automated) Put the item `visitorCounter:0` into the freshly created DynamoDB database.
+3. Upload your static website's content to the freshly created, main S3 bucket.
+4. In the outputs of the CloudFormation stack, you will find the CloudFront URL of your new website. The API Gateway URL is displayed there as well, make sure to modify your frontend code to reflect the correct endpoint.
+5. (Optional) Point your domain's name servers to the freshly created Route53 hosted zone.

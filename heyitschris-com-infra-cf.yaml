@@ -87,8 +87,6 @@ Resources:
   ## Cloudfront distribution
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
-    DependsOn:
-      - HeyitschrisComCertificate
     Properties:
       DistributionConfig:
         Origins:
@@ -127,7 +125,7 @@ Resources:
           ViewerProtocolPolicy: redirect-to-https
         PriceClass: PriceClass_100
         ViewerCertificate:
-          AcmCertificateArn: !Ref HeyitschrisComCertificate
+          AcmCertificateArn: !Ref DomainCertificate
           SslSupportMethod: sni-only
 
   # Visiton Counter Part
@@ -316,7 +314,7 @@ Resources:
   #     DynamoTableName: !Ref DDBTable
 
   # ACM Certificate for heyitschris.com
-  HeyitschrisComCertificate:
+  DomainCertificate:
     Type: AWS::CertificateManager::Certificate
     Properties:
       DomainName: !Sub "*.${WebsiteDomainName}"
