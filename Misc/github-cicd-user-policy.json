@@ -1,37 +1,66 @@
 {
   "Version": "2012-10-17",
   "Statement": [
-    {
-      "Sid": "Stmt1592783350721",
-      "Action": [
-        "cloudformation:CreateChangeSet",
-        "cloudformation:CreateStack",
-        "cloudformation:CreateUploadBucket",
-        "cloudformation:ExecuteChangeSet",
-        "cloudformation:GetStackPolicy",
-        "cloudformation:ListStacks",
-        "cloudformation:SetStackPolicy",
-        "cloudformation:UpdateStack"
-      ],
-      "Effect": "Allow",
-      "Resource": "arn:aws:cloudformation:us-east-1:130783386804:stack/heyitschris-com-infra/*"
+      {
+          "Sid": "CloudFormation",
+          "Action": [
+              "cloudformation:CreateChangeSet",
+              "cloudformation:CreateStack",
+              "cloudformation:CreateUploadBucket",
+              "cloudformation:ExecuteChangeSet",
+              "cloudformation:GetStackPolicy",
+              "cloudformation:ListStacks",
+              "cloudformation:SetStackPolicy",
+              "cloudformation:UpdateStack"
+          ],
+          "Effect": "Allow",
+          "Resource": "arn:aws:cloudformation:us-east-1:130783386804:stack/heyitschris-com-infra/*"
+      },
+      {
+          "Sid": "UpdateCFTemplate",
+          "Action": [
+              "s3:GetObject",
+              "s3:PutObject"
+          ],
+          "Effect": "Allow",
+          "Resource": "arn:aws:s3:::cf-templates*/*"
+      },
+      {
+        "Sid": "UpdateCFTemplate2",
+        "Action": [
+            "s3:ListBucket"
+        ],
+        "Effect": "Allow",
+        "Resource": "arn:aws:s3:::cf-templates*"
     },
-    {
-      "Sid": "Stmt1592783465441",
-      "Action": [
-        "s3:GetObject",
-        "s3:PutObject"
-      ],
-      "Effect": "Allow",
-      "Resource": "arn:aws:s3:::cf-templates*"
+      {
+          "Sid": "StaticWebsiteUpdate",
+          "Action": [
+              "s3:DeleteObject",
+              "s3:DeleteObjectVersion",
+              "s3:GetObject",
+              "s3:GetObjectVersion",
+              "s3:PutObject",
+              "s3:ListBucket"
+          ],
+          "Effect": "Allow",
+          "Resource": "arn:aws:s3:::heyitschris-com/*"
+      },
+      {
+        "Sid": "StaticWebsiteUpdate2",
+        "Action": [
+            "s3:ListBucket"
+        ],
+        "Effect": "Allow",
+        "Resource": "arn:aws:s3:::heyitschris-com"
     },
-    {
-      "Sid": "IAM",
-      "Action": [
-        "iam:PassRole"
-      ],
-      "Effect": "Allow",
-      "Resource": "arn:aws:iam::130783386804:role/CloudFormationDeployS3StaticWebsiteRole"
-    }
+      {
+          "Sid": "IAM",
+          "Action": [
+              "iam:PassRole"
+          ],
+          "Effect": "Allow",
+          "Resource": "arn:aws:iam::130783386804:role/CloudFormationDeployS3StaticWebsiteRole"
+      }
   ]
 }
