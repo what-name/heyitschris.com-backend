@@ -170,7 +170,7 @@ Resources:
               - dynamodb:GetItem
               - dynamodb:PutItem
               - dynamodb:UpdateItem
-              Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS:AccountId}:table/${DDBTable}"
+              Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${DDBTable}"
             - Effect: Allow
               Action:
               - logs:*
