@@ -39,6 +39,16 @@ Resources:
       Tags:
         - Key: CostCenter
           Value: !Sub "${WebsiteDomainName}"
+  
+  BlogWebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${S3BucketName}-blog"
+      WebsiteConfiguration:
+        IndexDocument: index.html
+      Tags:
+        - Key: CostCenter
+          Value: !Sub "${WebsiteDomainName}"
 
   LogsBucket:
     Type: AWS::S3::Bucket
@@ -66,12 +76,23 @@ Resources:
                   - CloudFrontOAI
                   - S3CanonicalUserId
               Action: 's3:GetObject'
-              Resource: !Join 
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref WebsiteBucket
-                  - /*
+              Resource: !Sub "arn:aws:s3:::${WebsiteBucket}/*"
         Bucket: !Ref WebsiteBucket
+
+  # Bucket policy for the blog website bucket
+  BlogWebsiteBucketBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        PolicyDocument:
+          Id: PublicAccessPolicy
+          Version: 2012-10-17
+          Statement:
+            - Sid: PublicReadForGetBucketObjects
+              Effect: Allow
+              Principal: "*"
+              Action: "s3:GetObject"
+              Resource: !Sub "arn:aws:s3:::${BlogWebsiteBucket}/*"
+        Bucket: !Ref BlogWebsiteBucket
   
   # CloudFront
   ## CloudFront OAI for the bucket policy
