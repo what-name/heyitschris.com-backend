@@ -95,7 +95,7 @@ Resources:
         Bucket: !Ref BlogWebsiteBucket
   
   # CloudFront
-  ## CloudFront OAI for the bucket policy
+  ## CloudFront OAI for the website bucket policy
   CloudFrontOAI:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties: 
@@ -104,6 +104,16 @@ Resources:
           - ''
           - - 'The OAI for the bucket: '
             - !Ref WebsiteBucket
+
+  ## CloudFront OAI for the blog bucket policy
+  CloudFrontOAIBlog:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties: 
+      CloudFrontOriginAccessIdentityConfig: 
+        Comment: !Join 
+          - ''
+          - - 'The OAI for the bucket: '
+            - !Ref BlogWebsiteBucket
 
   ## Cloudfront distribution
   CloudFrontDistribution:
@@ -141,6 +151,50 @@ Resources:
             - GET
             - OPTIONS
           TargetOriginId: myS3Origin
+          ForwardedValues:
+            QueryString: 'false'
+          ViewerProtocolPolicy: redirect-to-https
+        PriceClass: PriceClass_100
+        ViewerCertificate:
+          AcmCertificateArn: !Ref DomainCertificate
+          SslSupportMethod: sni-only
+
+  ## Blog Cloudfront distribution
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+        - DomainName: !Join 
+            - ''
+            - - !Ref BlogWebsiteBucket
+              - '.s3.amazonaws.com'
+          Id: myBlogS3Origin
+          S3OriginConfig:
+            OriginAccessIdentity: !Join 
+              - ''
+              - - 'origin-access-identity/cloudfront/'
+                - !Ref CloudFrontOAIBlog
+        Enabled: 'true'
+        Comment: Static blog website distribution
+        DefaultRootObject: index.html
+        # Logging:
+        #   IncludeCookies: 'false'
+        #   Bucket: !Ref LogsBucket
+        #   Prefix: CloudFrontLogs
+        
+        Aliases:
+          - blog.heyitschris.com
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - HEAD
+            - GET
+            - OPTIONS
+          CachedMethods:
+            - HEAD
+            - GET
+            - OPTIONS
+          TargetOriginId: myBlogS3Origin
           ForwardedValues:
             QueryString: 'false'
           ViewerProtocolPolicy: redirect-to-https
