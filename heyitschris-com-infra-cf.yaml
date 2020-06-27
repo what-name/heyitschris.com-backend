@@ -180,7 +180,10 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-        - DomainName: "http://heyitschris-com-blog.s3-website-us-east-1.amazonaws.com"
+        - DomainName: !Join 
+            - ''
+            - - !Ref BlogWebsiteBucket
+              - '.s3-website-us-east-1.amazonaws.com'
           Id: myBlogS3Origin
           S3OriginConfig:
             OriginAccessIdentity: !Join 
@@ -189,7 +192,7 @@ Resources:
                 - !Ref CloudFrontOAIBlog
         Enabled: 'true'
         Comment: Static blog website distribution
-        DefaultRootObject: index.html
+        #DefaultRootObject: index.html
         # Logging:
         #   IncludeCookies: 'false'
         #   Bucket: !Ref LogsBucket
