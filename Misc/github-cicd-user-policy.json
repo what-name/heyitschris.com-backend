@@ -70,6 +70,14 @@
             "Resource": "arn:aws:s3:::heyitschris-com-blog"
         },
         {
+            "Sid": "StaticBlogWebsiteCloudFrontInvalidation",
+            "Action": [
+                "cloudfront:CreateInvalidation"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:cloudfront::130783386804:distribution/E1NSOHDL8AF4CQ"
+        },
+        {
             "Sid": "IAM",
             "Action": [
                 "iam:PassRole"
