@@ -196,7 +196,7 @@ Resources:
           CustomOriginConfig: 
             OriginProtocolPolicy: http-only
             HTTPPort: 80
-            OriginSslProtocols: 
+            OriginSSLProtocols: 
               - TLSv1
               - TLSv1.1
               - TLSv1.2
@@ -228,7 +228,7 @@ Resources:
             - HEAD
             - GET
             - OPTIONS
-          #TargetOriginId: myBlogS3Origin
+          TargetOriginId: !Sub "${BlogWebsiteBucket}-origin"
           ForwardedValues:
             QueryString: 'false'
           ViewerProtocolPolicy: redirect-to-https
