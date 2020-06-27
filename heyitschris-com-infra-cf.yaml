@@ -52,7 +52,6 @@ Resources:
             AllowedMethods: 
               - GET
               - HEAD
-              - OPTIONS
             AllowedOrigins: 
               - "*"
             AllowedHeaders: 
