@@ -192,7 +192,7 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-          Id: !Sub "${BlogWebsiteBucket}-origin"
+        - Id: !Sub "${BlogWebsiteBucket}-origin"
           CustomOriginConfig: 
             OriginProtocolPolicy: http-only
             HTTPPort: 80
