@@ -192,21 +192,16 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-          Quantity: 1
-          Items: 
-          - Id: !Sub "${BlogWebsiteBucket}-origin"
-            OriginPath: ""
-            CustomOriginConfig: 
-              OriginProtocolPolicy: http-only
-              HTTPPort: 80
-              OriginSslProtocols: 
-                Quantity: 3
-                Items: 
-                  - TLSv1
-                  - TLSv1.1
-                  - TLSv1.2
-              HTTPSPort: 443
-            DomainName: !Sub "${BlogWebsiteBucket}.s3-website-${AWS::Region}.amazonaws.com"
+          Id: !Sub "${BlogWebsiteBucket}-origin"
+          CustomOriginConfig: 
+            OriginProtocolPolicy: http-only
+            HTTPPort: 80
+            OriginSslProtocols: 
+              - TLSv1
+              - TLSv1.1
+              - TLSv1.2
+            HTTPSPort: 443
+          DomainName: !Sub "${BlogWebsiteBucket}.s3-website-${AWS::Region}.amazonaws.com"
         # - DomainName: !Sub "${BlogWebsiteBucket}.s3-website-${AWS::Region}.amazonaws.com"
         #   Id: myBlogS3Origin
         #   S3OriginConfig:
