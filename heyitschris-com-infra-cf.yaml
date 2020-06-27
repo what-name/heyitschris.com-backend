@@ -198,7 +198,7 @@ Resources:
                 - !Ref CloudFrontOAIBlog
         Enabled: 'true'
         Comment: Static blog website distribution
-        #DefaultRootObject: index.html
+        DefaultRootObject: index.html
         # Logging:
         #   IncludeCookies: 'false'
         #   Bucket: !Ref LogsBucket
