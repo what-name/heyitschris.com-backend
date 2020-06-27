@@ -46,6 +46,17 @@ Resources:
       BucketName: !Sub "${S3BucketName}-blog"
       WebsiteConfiguration:
         IndexDocument: index.html
+      CorsConfiguration:
+        CorsRules:
+          - 
+            AllowedMethods: 
+              - GET
+              - HEAD
+              - OPTIONS
+            AllowedOrigins: 
+              - "*"
+            AllowedHeaders: 
+              - "*"
       Tags:
         - Key: CostCenter
           Value: !Sub "${WebsiteDomainName}"
