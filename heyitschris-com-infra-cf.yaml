@@ -563,12 +563,12 @@ Resources:
         - "autodiscover.migadu.com."
 
 Outputs:
-  CloudFrontURL:
+  CloudFrontBlogURL:
     Value: !Join 
       - ''
       - - 'https://'
         - !GetAtt 
-          - CloudFrontDistribution
+          - BlogCloudFrontDistribution
           - DomainName
     Description: HTTPS Access point
   apiGatewayInvokeURL:
