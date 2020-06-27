@@ -103,10 +103,16 @@ Resources:
                 CanonicalUser: !GetAtt
                   - CloudFrontOAIBlog
                   - S3CanonicalUserId
-              Action: 
-                - s3:GetObject
-                - s3:ListBucket
+              Action: s3:GetObject
               Resource: !Sub "arn:aws:s3:::${BlogWebsiteBucket}/*"
+              - Sid: CloudFrontReadForGetBucketObjects
+              Effect: Allow
+              Principal:
+                CanonicalUser: !GetAtt
+                  - CloudFrontOAIBlog
+                  - S3CanonicalUserId
+              Action: s3:ListBucket
+              Resource: !Sub "arn:aws:s3:::${BlogWebsiteBucket}"
         Bucket: !Ref BlogWebsiteBucket
   
   # CloudFront
