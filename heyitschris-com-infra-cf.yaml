@@ -180,10 +180,7 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-        - DomainName: !Join 
-            - ''
-            - - !Ref BlogWebsiteBucket
-              - '.s3-website-us-east-1.amazonaws.com'
+        - DomainName: "http://heyitschris-com-blog.s3-website-us-east-1.amazonaws.com"
           Id: myBlogS3Origin
           S3OriginConfig:
             OriginAccessIdentity: !Join 
