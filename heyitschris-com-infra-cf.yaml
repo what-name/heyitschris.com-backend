@@ -113,6 +113,12 @@ Resources:
                   - S3CanonicalUserId
               Action: s3:ListBucket
               Resource: !Sub "arn:aws:s3:::${BlogWebsiteBucket}"
+            # allow public access
+            - Sid: PublicReadForGetBucketObjects
+              Effect: Allow
+              Principal: "*"
+              Action: s3:GetObject
+              Resource: !Sub "arn:aws:s3:::${BlogWebsiteBucket}/*"
         Bucket: !Ref BlogWebsiteBucket
   
   # CloudFront
@@ -186,16 +192,28 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-        - DomainName: !Join 
-            - ''
-            - - !Ref BlogWebsiteBucket
-              - '.s3.amazonaws.com'
-          Id: myBlogS3Origin
-          S3OriginConfig:
-            OriginAccessIdentity: !Join 
-              - ''
-              - - 'origin-access-identity/cloudfront/'
-                - !Ref CloudFrontOAIBlog
+          Quantity: 1
+          Items: 
+          - Id: !Sub "${BlogWebsiteBucket}-origin"
+            OriginPath: ""
+            CustomOriginConfig: 
+              OriginProtocolPolicy: http-only
+              HTTPPort: 80
+              OriginSslProtocols: 
+                Quantity: 3
+                Items: 
+                  - TLSv1
+                  - TLSv1.1
+                  - TLSv1.2
+              HTTPSPort: 443
+            DomainName: !Sub "${BlogWebsiteBucket}.s3-website-${AWS::Region}.amazonaws.com"
+        # - DomainName: !Sub "${BlogWebsiteBucket}.s3-website-${AWS::Region}.amazonaws.com"
+        #   Id: myBlogS3Origin
+        #   S3OriginConfig:
+        #     OriginAccessIdentity: !Join 
+        #       - ''
+        #       - - 'origin-access-identity/cloudfront/'
+        #         - !Ref CloudFrontOAIBlog
         Enabled: 'true'
         Comment: Static blog website distribution
         DefaultRootObject: index.html
@@ -215,7 +233,7 @@ Resources:
             - HEAD
             - GET
             - OPTIONS
-          TargetOriginId: myBlogS3Origin
+          #TargetOriginId: myBlogS3Origin
           ForwardedValues:
             QueryString: 'false'
           ViewerProtocolPolicy: redirect-to-https
