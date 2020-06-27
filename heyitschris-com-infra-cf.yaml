@@ -160,7 +160,7 @@ Resources:
           SslSupportMethod: sni-only
 
   ## Blog Cloudfront distribution
-  CloudFrontDistribution:
+  BlogCloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
