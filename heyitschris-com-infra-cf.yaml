@@ -103,7 +103,9 @@ Resources:
                 CanonicalUser: !GetAtt
                   - CloudFrontOAIBlog
                   - S3CanonicalUserId
-              Action: 's3:GetObject'
+              Action: 
+                - s3:GetObject
+                - s3:ListBucket
               Resource: !Sub "arn:aws:s3:::${BlogWebsiteBucket}/*"
         Bucket: !Ref BlogWebsiteBucket
   
@@ -181,7 +183,7 @@ Resources:
         - DomainName: !Join 
             - ''
             - - !Ref BlogWebsiteBucket
-              - '.s3.amazonaws.com'
+              - '.s3-website-us-east-1.amazonaws.com'
           Id: myBlogS3Origin
           S3OriginConfig:
             OriginAccessIdentity: !Join 
