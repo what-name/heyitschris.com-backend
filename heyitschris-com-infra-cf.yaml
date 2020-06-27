@@ -427,6 +427,17 @@ Resources:
         DNSName: !GetAtt CloudFrontDistribution.DomainName
         HostedZoneId: Z2FDTNDATAQYW2
 
+  ## The A record to redirect to the blog
+  DNSRecordBlog:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: !Sub "blog.${WebsiteDomainName}"
+      Type: A
+      HostedZoneId: !Ref HostedZone
+      AliasTarget:
+        DNSName: !GetAtt BlogCloudFrontDistribution.DomainName
+        HostedZoneId: Z2FDTNDATAQYW2
+
   ## Redirect www to the main domain
   DNSRecordMainWWWredirect:
     Type: AWS::Route53::RecordSet
