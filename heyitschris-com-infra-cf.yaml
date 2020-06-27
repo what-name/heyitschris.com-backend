@@ -97,23 +97,6 @@ Resources:
           Id: PublicAccessPolicy
           Version: 2012-10-17
           Statement:
-            - Sid: CloudFrontReadForGetBucketObjects
-              Effect: Allow
-              Principal:
-                CanonicalUser: !GetAtt
-                  - CloudFrontOAIBlog
-                  - S3CanonicalUserId
-              Action: s3:GetObject
-              Resource: !Sub "arn:aws:s3:::${BlogWebsiteBucket}/*"
-            - Sid: CloudFrontReadForGetBucketObjects
-              Effect: Allow
-              Principal:
-                CanonicalUser: !GetAtt
-                  - CloudFrontOAIBlog
-                  - S3CanonicalUserId
-              Action: s3:ListBucket
-              Resource: !Sub "arn:aws:s3:::${BlogWebsiteBucket}"
-            # allow public access
             - Sid: PublicReadForGetBucketObjects
               Effect: Allow
               Principal: "*"
@@ -131,17 +114,7 @@ Resources:
           - ''
           - - 'The OAI for the bucket: '
             - !Ref WebsiteBucket
-
-  ## CloudFront OAI for the blog bucket policy
-  CloudFrontOAIBlog:
-    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
-    Properties: 
-      CloudFrontOriginAccessIdentityConfig: 
-        Comment: !Join 
-          - ''
-          - - 'The OAI for the bucket: '
-            - !Ref BlogWebsiteBucket
-
+            
   ## Cloudfront distribution
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
@@ -161,11 +134,6 @@ Resources:
         Enabled: 'true'
         Comment: Static website distribution
         DefaultRootObject: index.html
-        # Logging:
-        #   IncludeCookies: 'false'
-        #   Bucket: !Ref LogsBucket
-        #   Prefix: CloudFrontLogs
-        
         Aliases:
           - heyitschris.com
         DefaultCacheBehavior:
@@ -202,32 +170,18 @@ Resources:
               - TLSv1.2
             HTTPSPort: 443
           DomainName: !Sub "${BlogWebsiteBucket}.s3-website-${AWS::Region}.amazonaws.com"
-        # - DomainName: !Sub "${BlogWebsiteBucket}.s3-website-${AWS::Region}.amazonaws.com"
-        #   Id: myBlogS3Origin
-        #   S3OriginConfig:
-        #     OriginAccessIdentity: !Join 
-        #       - ''
-        #       - - 'origin-access-identity/cloudfront/'
-        #         - !Ref CloudFrontOAIBlog
         Enabled: 'true'
         Comment: Static blog website distribution
         DefaultRootObject: index.html
-        # Logging:
-        #   IncludeCookies: 'false'
-        #   Bucket: !Ref LogsBucket
-        #   Prefix: CloudFrontLogs
-        
         Aliases:
           - blog.heyitschris.com
         DefaultCacheBehavior:
           AllowedMethods:
             - HEAD
             - GET
-            - OPTIONS
           CachedMethods:
             - HEAD
             - GET
-            - OPTIONS
           TargetOriginId: !Sub "${BlogWebsiteBucket}-origin"
           ForwardedValues:
             QueryString: 'false'
