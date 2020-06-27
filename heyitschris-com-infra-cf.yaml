@@ -80,19 +80,19 @@ Resources:
         Bucket: !Ref WebsiteBucket
 
   # Bucket policy for the blog website bucket
-  BlogWebsiteBucketBucketPolicy:
-      Type: AWS::S3::BucketPolicy
-      Properties:
-        PolicyDocument:
-          Id: PublicAccessPolicy
-          Version: 2012-10-17
-          Statement:
-            - Sid: PublicReadForGetBucketObjects
-              Effect: Allow
-              Principal: "*"
-              Action: "s3:GetObject"
-              Resource: !Sub "arn:aws:s3:::${BlogWebsiteBucket}/*"
-        Bucket: !Ref BlogWebsiteBucket
+  # BlogWebsiteBucketBucketPolicy:
+  #     Type: AWS::S3::BucketPolicy
+  #     Properties:
+  #       PolicyDocument:
+  #         Id: PublicAccessPolicy
+  #         Version: 2012-10-17
+  #         Statement:
+  #           - Sid: PublicReadForGetBucketObjects
+  #             Effect: Allow
+  #             Principal: "*"
+  #             Action: "s3:GetObject"
+  #             Resource: !Sub "arn:aws:s3:::${BlogWebsiteBucket}/*"
+  #       Bucket: !Ref BlogWebsiteBucket
   
   # CloudFront
   ## CloudFront OAI for the website bucket policy
