@@ -137,6 +137,9 @@ Resources:
         Aliases:
           - heyitschris.com
         DefaultCacheBehavior:
+          DefaultTTL: 1800
+          MaxTTL: 14400
+          Compress: true
           AllowedMethods:
             - HEAD
             - GET
