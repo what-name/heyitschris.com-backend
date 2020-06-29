@@ -11,6 +11,10 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
+    
+    - name: Validate CloudFormation Template
+      run: aws cloudformation validate-template --template-body file://heyitschris-com-infra-cf.yaml
+
     - name: Update Cloudformation Stack
       run: aws cloudformation update-stack
         --stack-name heyitschris-com-infra

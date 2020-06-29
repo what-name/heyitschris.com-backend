@@ -132,7 +132,7 @@ Resources:
               - - 'origin-access-identity/cloudfront/'
                 - !Ref CloudFrontOAI
         Enabled: 'true'
-        Comment: Static website distribution
+        Comment: Static main website distribution
         DefaultRootObject: index.html
         Aliases:
           - heyitschris.com

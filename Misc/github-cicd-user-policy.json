@@ -17,6 +17,14 @@
             "Resource": "arn:aws:cloudformation:us-east-1:130783386804:stack/heyitschris-com-infra/*"
         },
         {
+            "Sid": "CloudFormationValidateTemplate",
+            "Action": [
+                "cloudformation:ValidateTemplate"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
             "Sid": "UpdateCFTemplate",
             "Action": [
                 "s3:GetObject",
