@@ -1,7 +1,7 @@
 ![Deploy CF Template](https://github.com/what-name/heyitschris.com-backend/workflows/Deploy%20CF%20Template/badge.svg)
 
 # Info
-*Disclaimer: this project is actively being worked on.*
+*Disclaimer: this project was originally made for the [Cloud Resume Challenge](https://cloudresumechallenge.dev/)*
 This repository holds the backend code for my personal website [heyitschris.com](https://heyitschris.com).
 It includes:
 - Service Control Policy for the designated sub-account
