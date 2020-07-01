@@ -135,7 +135,8 @@ Resources:
         Comment: Static main website distribution
         DefaultRootObject: index.html
         Aliases:
-          - heyitschris.com
+          - !Ref WebsiteDomainName
+          - !Sub "www.${WebsiteDomainName}"
         DefaultCacheBehavior:
           DefaultTTL: 1800
           MaxTTL: 14400
@@ -177,7 +178,7 @@ Resources:
         Comment: Static blog website distribution
         DefaultRootObject: index.html
         Aliases:
-          - blog.heyitschris.com
+          - !Sub "blog.${WebsiteDomainName}"
         DefaultCacheBehavior:
           DefaultTTL: 1800
           MaxTTL: 14400
@@ -274,7 +275,6 @@ Resources:
                   },
                   ReturnValues="UPDATED_NEW"
               )
-              print("Response visitor count: ", ddbResponse["Attributes"]["amount"])
               responseBody = json.dumps({"visitorCount": int(float(ddbResponse["Attributes"]["amount"]))})
               apiResponse = {
                   "isBase64Encoded": False,
@@ -358,7 +358,7 @@ Resources:
       - VisitorCounterAPIGatewayRootMethod
     Properties:
       RestApiId: !Ref VisitorCounterAPIGateway
-      StageName: prod # not clean, but it'll do now
+      StageName: prod
 
   VisitorCounterLambdaApiGatewayInvoke:
     Type: AWS::Lambda::Permission
