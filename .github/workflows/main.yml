@@ -1,24 +1,24 @@
-name: Deploy CF Template
-on: [push]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
-    
-    - name: Validate CloudFormation Template
-      run: aws cloudformation validate-template --template-body file://heyitschris-com-infra-cf.yaml
-
-    - name: Update Cloudformation Stack
-      run: aws cloudformation update-stack
-        --stack-name heyitschris-com-infra
-        --template-body file://heyitschris-com-infra-cf.yaml
-        --parameters ParameterKey=S3BucketName,ParameterValue=heyitschris-com ParameterKey=DynamoDBTableName,ParameterValue=heyitschris.com ParameterKey=WebsiteDomainName,ParameterValue=heyitschris.com
-        --capabilities CAPABILITY_IAM
-        --role-arn arn:aws:iam::130783386804:role/CloudFormationDeployS3StaticWebsiteRole
+# name: Deploy CF Template
+# on: [push]
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v1
+#     - name: Configure AWS Credentials
+#       uses: aws-actions/configure-aws-credentials@v1
+#       with:
+#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#         aws-region: us-east-1
+#     
+#     - name: Validate CloudFormation Template
+#       run: aws cloudformation validate-template --template-body file://heyitschris-com-infra-cf.yaml
+# 
+#     - name: Update Cloudformation Stack
+#       run: aws cloudformation update-stack
+#         --stack-name heyitschris-com-infra
+#         --template-body file://heyitschris-com-infra-cf.yaml
+#         --parameters ParameterKey=S3BucketName,ParameterValue=heyitschris-com ParameterKey=DynamoDBTableName,ParameterValue=heyitschris.com ParameterKey=WebsiteDomainName,ParameterValue=heyitschris.com
+#         --capabilities CAPABILITY_IAM
+#         --role-arn arn:aws:iam::130783386804:role/CloudFormationDeployS3StaticWebsiteRole
