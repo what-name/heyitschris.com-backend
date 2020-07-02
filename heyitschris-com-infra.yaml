@@ -1,4 +1,9 @@
 ---
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  The backend infrastructure for the heyitschris.com website.
+
 Parameters:
   # FIXME set input constraints for these
   S3BucketName:
@@ -13,6 +18,10 @@ Parameters:
     Default: mydomain.com
     # ConstraintDescription: Only valid domain names
     # AllowedPattern: "\/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\\.[a-zA-Z]{2,}$"
+
+Globals:
+  Function:
+    Timeout: 5
 
 
 Resources:
@@ -198,26 +207,17 @@ Resources:
           AcmCertificateArn: !Ref DomainCertificate
           SslSupportMethod: sni-only
 
-  # Visiton Counter Part
-  ## DynamoDB Table - FIXME need to manually input item for the first time
-  ## FORMAT: id: visitorCount, amount: 0
   DDBTable:
-    Type: AWS::DynamoDB::Table
+    Type: AWS::Serverless::SimpleTable
     Properties:
-      TableName: 
-        !Ref DynamoDBTableName
-      AttributeDefinitions:
-        -
-          AttributeName: "id"
-          AttributeType: "S"
-      KeySchema:
-        -
-          AttributeName: "id"
-          KeyType: "HASH"
-      BillingMode: PAY_PER_REQUEST
+      PrimaryKey:
+        Name: id
+        Type: String
+      Tags:
+        CostCenter: !Ref WebsiteDomainName
   
   ## Lambda role to access visitorCount in DynamoDB
-  LambdaRole:
+  VisitorCounterFunctionRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -247,135 +247,97 @@ Resources:
               Resource: "*"
 
   ## Lambda function to retrieve visitorCount from DynamoDB
-  VisitorCountLambda:
-    Type: AWS::Lambda::Function
-    Description: This function retrieves and updates the visitor count in the DynamoDB database.
+  VisitorCounterFunction:
+    Type: AWS::Serverless::Function 
     Properties:
+      CodeUri: VisitorCounter/
+      Handler: visitorCounterLambda.handler
+      Runtime: python3.7
+      Role: !GetAtt VisitorCounterFunctionRole.Arn
       Environment:
-        Variables:
-          databaseName: !Ref DDBTable
-      Code:
-        ZipFile: |
-          import json
-          import boto3
-          import os
-
-          dynamodb = boto3.resource('dynamodb')
-          ddbTableName = os.environ['databaseName']
-          table = dynamodb.Table(ddbTableName)
-
-          def handler(event, context):
-              ddbResponse = table.update_item(
-                  Key={
-                      "id": "visitorCount"
-                  },
-                  UpdateExpression='SET amount = amount + :inc',
-                  ExpressionAttributeValues={
-                      ':inc': 1
-                  },
-                  ReturnValues="UPDATED_NEW"
-              )
-              responseBody = json.dumps({"visitorCount": int(float(ddbResponse["Attributes"]["amount"]))})
-              apiResponse = {
-                  "isBase64Encoded": False,
-                  "statusCode": 200,
-                  "body": responseBody,
-                  "headers": {
-                      "Access-Control-Allow-Headers" : "Content-Type,X-Amz-Date,Authorization,X-Api-Key,x-requested-with",
-                      "Access-Control-Allow-Origin": "*",
-                      "Access-Control-Allow-Methods": "GET,OPTIONS" 
-                  },
-              }
-              return apiResponse
-      Handler: index.handler
-      Role: !GetAtt LambdaRole.Arn
-      Runtime: python3.6
-      MemorySize: 128
-      Timeout: 2
+          Variables: 
+            databaseName : !Ref DDBTable
+      Events:
+        VisitorCounter:
+          Type: Api 
+          Properties:
+            Path: /visitorCount
+            Method: get
       Tags:
-        - Key: CostCenter
-          Value: !Sub "${WebsiteDomainName}"
+        CostCenter: !Ref WebsiteDomainName
 
+  ## FIXME: No need for API Gateway with SAM anymore
   ## API Gateway
-  VisitorCounterAPIGateway:
-    Type: AWS::ApiGateway::RestApi
-    Properties:
-      Name: VisitorCounterAPI
-      Description: The API for the Lambda function that retrieves and updates the current visitor count
-      EndpointConfiguration:
-        Types:
-          - REGIONAL
-      Tags:
-        - Key: CostCenter
-          Value: !Sub "${WebsiteDomainName}"
-
-  VisitorCounterAPIGatewayRootMethod:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      AuthorizationType: NONE
-      HttpMethod: GET
-      Integration:
-        IntegrationHttpMethod: POST
-        Type: AWS_PROXY
-        Uri: !Sub
-          - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations
-          - lambdaArn: !GetAtt VisitorCountLambda.Arn
-      ResourceId: !GetAtt VisitorCounterAPIGateway.RootResourceId
-      RestApiId: !Ref VisitorCounterAPIGateway
-
-  VisitorCounterAPIGatewayOptionsMethod:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      AuthorizationType: NONE
-      RestApiId: !Ref VisitorCounterAPIGateway
-      ResourceId: !GetAtt VisitorCounterAPIGateway.RootResourceId
-      HttpMethod: OPTIONS
-      Integration:
-        IntegrationResponses:
-        - StatusCode: 200
-          ResponseParameters:
-            method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-            method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
-            method.response.header.Access-Control-Allow-Origin: "'*'"
-          ResponseTemplates:
-            application/json: ''
-        PassthroughBehavior: WHEN_NO_MATCH
-        RequestTemplates:
-          application/json: '{"statusCode": 200}'
-        Type: MOCK
-      MethodResponses:
-      - StatusCode: 200
-        ResponseModels:
-          application/json: 'Empty'
-        ResponseParameters:
-            method.response.header.Access-Control-Allow-Headers: true
-            method.response.header.Access-Control-Allow-Methods: true
-            method.response.header.Access-Control-Allow-Origin: true
-
-  VisitorCounterAPIGatewayDeployment:
-    Type: AWS::ApiGateway::Deployment
-    DependsOn:
-      - VisitorCounterAPIGatewayRootMethod
-    Properties:
-      RestApiId: !Ref VisitorCounterAPIGateway
-      StageName: prod
-
-  VisitorCounterLambdaApiGatewayInvoke:
-    Type: AWS::Lambda::Permission
-    Properties:
-      Action: lambda:InvokeFunction
-      FunctionName: !GetAtt VisitorCountLambda.Arn
-      Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${VisitorCounterAPIGateway}/*/GET/
-
-  #### WARNING
-  # This initialization function always fails to create. ignoring and solving it manually for now...
-  # InitializeDynamoDB:
-  #   Type: Custom::InitFunction
-  #   DependsOn: DDBTable
+  # VisitorCounterAPIGateway:
+  #   Type: AWS::ApiGateway::RestApi
   #   Properties:
-  #     ServiceToken: !GetAtt InitFunction.Arn
-  #     DynamoTableName: !Ref DDBTable
+  #     Name: VisitorCounterAPI
+  #     Description: The API for the Lambda function that retrieves and updates the current visitor count
+  #     EndpointConfiguration:
+  #       Types:
+  #         - REGIONAL
+  #     Tags:
+  #       - Key: CostCenter
+  #         Value: !Sub "${WebsiteDomainName}"
+
+  # VisitorCounterAPIGatewayRootMethod:
+  #   Type: AWS::ApiGateway::Method
+  #   Properties:
+  #     AuthorizationType: NONE
+  #     HttpMethod: GET
+  #     Integration:
+  #       IntegrationHttpMethod: POST
+  #       Type: AWS_PROXY
+  #       Uri: !Sub
+  #         - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations
+  #         - lambdaArn: !GetAtt VisitorCountLambda.Arn
+  #     ResourceId: !GetAtt VisitorCounterAPIGateway.RootResourceId
+  #     RestApiId: !Ref VisitorCounterAPIGateway
+
+  # VisitorCounterAPIGatewayOptionsMethod:
+  #   Type: AWS::ApiGateway::Method
+  #   Properties:
+  #     AuthorizationType: NONE
+  #     RestApiId: !Ref VisitorCounterAPIGateway
+  #     ResourceId: !GetAtt VisitorCounterAPIGateway.RootResourceId
+  #     HttpMethod: OPTIONS
+  #     Integration:
+  #       IntegrationResponses:
+  #       - StatusCode: 200
+  #         ResponseParameters:
+  #           method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+  #           method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+  #           method.response.header.Access-Control-Allow-Origin: "'*'"
+  #         ResponseTemplates:
+  #           application/json: ''
+  #       PassthroughBehavior: WHEN_NO_MATCH
+  #       RequestTemplates:
+  #         application/json: '{"statusCode": 200}'
+  #       Type: MOCK
+  #     MethodResponses:
+  #     - StatusCode: 200
+  #       ResponseModels:
+  #         application/json: 'Empty'
+  #       ResponseParameters:
+  #           method.response.header.Access-Control-Allow-Headers: true
+  #           method.response.header.Access-Control-Allow-Methods: true
+  #           method.response.header.Access-Control-Allow-Origin: true
+
+  # VisitorCounterAPIGatewayDeployment:
+  #   Type: AWS::ApiGateway::Deployment
+  #   DependsOn:
+  #     - VisitorCounterAPIGatewayRootMethod
+  #   Properties:
+  #     RestApiId: !Ref VisitorCounterAPIGateway
+  #     StageName: prod
+
+  # VisitorCounterLambdaApiGatewayInvoke:
+  #   Type: AWS::Lambda::Permission
+  #   Properties:
+  #     Action: lambda:InvokeFunction
+  #     FunctionName: !GetAtt VisitorCountLambda.Arn
+  #     Principal: apigateway.amazonaws.com
+  #     SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${VisitorCounterAPIGateway}/*/GET/
 
   # ACM Certificate for heyitschris.com
   DomainCertificate:
@@ -573,5 +535,6 @@ Outputs:
           - BlogCloudFrontDistribution
           - DomainName
     Description: HTTPS Access point
-  apiGatewayInvokeURL:
-    Value: !Sub "https://${VisitorCounterAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
+  VisitorCounterApi:
+    Description: "API Gateway endpoint URL for Prod stage for visitorCounter function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/visitorCount/"

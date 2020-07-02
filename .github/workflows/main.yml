@@ -1,5 +1,8 @@
-name: Deploy CF Template
-on: [push]
+name: Deploy SAM template
+on:
+  push:
+    branches:
+      - master
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,13 +15,31 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
     
-    - name: Validate CloudFormation Template
-      run: aws cloudformation validate-template --template-body file://heyitschris-com-infra-cf.yaml
+    - name: SAM Build
+      uses: TractorZoom/sam-cli-action@master
+      with:
+        sam_command: "build"
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-east-1
 
-    - name: Update Cloudformation Stack
-      run: aws cloudformation update-stack
-        --stack-name heyitschris-com-infra
-        --template-body file://heyitschris-com-infra-cf.yaml
-        --parameters ParameterKey=S3BucketName,ParameterValue=heyitschris-com ParameterKey=DynamoDBTableName,ParameterValue=heyitschris.com ParameterKey=WebsiteDomainName,ParameterValue=heyitschris.com
-        --capabilities CAPABILITY_IAM
-        --role-arn arn:aws:iam::130783386804:role/CloudFormationDeployS3StaticWebsiteRole
+    - name: SAM Deploy
+      uses: TractorZoom/sam-cli-action@master
+      with:
+        sam_command: "deploy -t heyitschris-com-infra.yaml"
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-east-1
+
+    # - name: Validate CloudFormation Template
+    #   run: aws cloudformation validate-template --template-body file://heyitschris-com-infra-cf.yaml
+
+    # - name: Update Cloudformation Stack
+    #   run: aws cloudformation update-stack
+    #     --stack-name heyitschris-com-infra
+    #     --template-body file://heyitschris-com-infra-cf.yaml
+    #     --parameters ParameterKey=S3BucketName,ParameterValue=heyitschris-com ParameterKey=DynamoDBTableName,ParameterValue=heyitschris.com ParameterKey=WebsiteDomainName,ParameterValue=heyitschris.com
+    #     --capabilities CAPABILITY_IAM
+    #     --role-arn arn:aws:iam::130783386804:role/CloudFormationDeployS3StaticWebsiteRole
