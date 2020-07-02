@@ -2,7 +2,7 @@ version = 0.1
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = "heyitschris-com-infra"
+stack_name = ""
 s3_bucket = "cf-templates-1ig8j85qno0fm-us-east-1"
 s3_prefix = ""
 region = "us-east-1"
