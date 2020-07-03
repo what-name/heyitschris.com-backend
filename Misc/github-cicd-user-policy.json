@@ -14,7 +14,7 @@
                 "cloudformation:UpdateStack"
             ],
             "Effect": "Allow",
-            "Resource": "arn:aws:cloudformation:us-east-1:130783386804:stack/heyitschris-com-infra/*"
+            "Resource": "arn:aws:cloudformation:us-east-1:130783386804:stack/heyitschris-com-infra"
         },
         {
             "Sid": "CloudFormationValidateTemplate",
@@ -52,7 +52,7 @@
             "Resource": "arn:aws:s3:::heyitschris-com/*"
         },
         {
-            "Sid": "StaticWebsiteUpdate",
+            "Sid": "BackendSAMDeployArtifacts",
             "Action": [
                 "s3:DeleteObject",
                 "s3:GetObject",
