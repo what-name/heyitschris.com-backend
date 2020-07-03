@@ -30,7 +30,8 @@ jobs:
         sam_command: "deploy -t heyitschris-com-infra.yaml \
           --role-arn arn:aws:iam::130783386804:role/CloudFormationDeployS3StaticWebsiteRole \
           --parameter-overrides ParameterKey=S3BucketName,ParameterValue=heyitschris-com ParameterKey=DynamoDBTableName,ParameterValue=heyitschris.com ParameterKey=WebsiteDomainName,ParameterValue=heyitschris.com \
-          --debug"
+          --debug \
+          --no-fail-on-empty-changeset"
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
