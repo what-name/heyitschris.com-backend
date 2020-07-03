@@ -2,9 +2,9 @@ version = 0.1
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = ""
-s3_bucket = "cf-templates-1ig8j85qno0fm-us-east-1"
-s3_prefix = ""
+stack_name = "heyitschris-com-infra"
+s3_bucket = "heyitschris-com-misc"
+s3_prefix = "DeploymentArtifacts"
 region = "us-east-1"
 confirm_changeset = false
-capabilities = "CAPABILITY_IAM"
+capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
