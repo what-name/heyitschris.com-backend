@@ -67,6 +67,16 @@
             "Resource": "arn:aws:s3:::heyitschris-com/*"
         },
         {
+            "Sid": "SAMArtifactsBucketAllow",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": "arn:aws:s3:::heyitschris-com-misc/*"
+        },
+        {
             "Sid": "AllowUpdateBlogFrontend",
             "Effect": "Allow",
             "Action": [
