@@ -2,106 +2,79 @@
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "CloudFormation",
-            "Action": [
-                "cloudformation:CreateChangeSet",
-                "cloudformation:CreateStack",
-                "cloudformation:CreateUploadBucket",
-                "cloudformation:ExecuteChangeSet",
-                "cloudformation:GetStackPolicy",
-                "cloudformation:ListStacks",
-                "cloudformation:SetStackPolicy",
-                "cloudformation:UpdateStack"
-            ],
+            "Sid": "ValidateCFTemplate",
             "Effect": "Allow",
-            "Resource": "arn:aws:cloudformation:us-east-1:130783386804:stack/heyitschris-com-infra"
-        },
-        {
-            "Sid": "CloudFormationValidateTemplate",
             "Action": [
                 "cloudformation:ValidateTemplate"
             ],
-            "Effect": "Allow",
             "Resource": "*"
         },
         {
-            "Sid": "UpdateCFTemplate",
-            "Action": [
-                "s3:GetObject",
-                "s3:PutObject"
-            ],
+            "Sid": "SAMDeploy",
             "Effect": "Allow",
-            "Resource": "arn:aws:s3:::cf-templates*/*"
+            "Action": [
+                "cloudformation:DeleteStackInstances",
+                "cloudformation:DetectStackDrift",
+                "cloudformation:CancelUpdateStack",
+                "cloudformation:UpdateStackInstances",
+                "cloudformation:DescribeStackResource",
+                "cloudformation:CreateChangeSet",
+                "cloudfront:CreateInvalidation",
+                "cloudformation:CreateStackInstances",
+                "cloudformation:DeleteChangeSet",
+                "cloudformation:ContinueUpdateRollback",
+                "cloudformation:DetectStackResourceDrift",
+                "iam:PassRole",
+                "cloudformation:DescribeStackEvents",
+                "cloudformation:UpdateStack",
+                "cloudformation:DescribeChangeSet",
+                "cloudformation:ExecuteChangeSet",
+                "cloudformation:ListStackResources",
+                "cloudformation:SetStackPolicy",
+                "cloudformation:DescribeStackResources",
+                "cloudformation:GetTemplateSummary",
+                "cloudformation:DescribeStacks",
+                "s3:PutObject",
+                "s3:GetObject",
+                "cloudformation:GetStackPolicy",
+                "cloudformation:CreateStack",
+                "cloudformation:GetTemplate",
+                "cloudformation:TagResource",
+                "cloudformation:UntagResource",
+                "cloudformation:ListChangeSets"
+            ],
+            "Resource": [
+                "arn:aws:cloudfront::130783386804:distribution/E1NSOHDL8AF4CQ",
+                "arn:aws:cloudformation:us-east-1:130783386804:stack/heyitschris-com-infra/*",
+                "arn:aws:s3:::cf-templates*/*",
+                "arn:aws:iam::130783386804:role/CloudFormationDeployS3StaticWebsiteRole"
+            ]
         },
         {
-            "Sid": "UpdateCFTemplate2",
-            "Action": [
-                "s3:ListBucket"
-            ],
+            "Sid": "ListArtifactsBucket",
             "Effect": "Allow",
+            "Action": "s3:ListBucket",
             "Resource": "arn:aws:s3:::cf-templates*"
         },
         {
-            "Sid": "StaticWebsiteUpdate",
-            "Action": [
-                "s3:DeleteObject",
-                "s3:GetObject",
-                "s3:PutObject"
-            ],
+            "Sid": "AllowFrontendUpdate",
             "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:DeleteObject"
+            ],
             "Resource": "arn:aws:s3:::heyitschris-com/*"
         },
         {
-            "Sid": "BackendSAMDeployArtifacts",
+            "Sid": "AllowUpdateBlogFrontend",
+            "Effect": "Allow",
             "Action": [
-                "s3:DeleteObject",
+                "s3:PutObject",
                 "s3:GetObject",
-                "s3:PutObject"
+                "s3:DeleteObject"
             ],
-            "Effect": "Allow",
-            "Resource": "arn:aws:s3:::heyitschris-com-misc/*"
-        },
-        {
-            "Sid": "StaticWebsiteUpdate2",
-            "Action": [
-                "s3:ListBucket"
-            ],
-            "Effect": "Allow",
-            "Resource": "arn:aws:s3:::heyitschris-com"
-        },
-        {
-            "Sid": "StaticBlogWebsiteUpdate",
-            "Action": [
-                "s3:DeleteObject",
-                "s3:GetObject",
-                "s3:PutObject"
-            ],
-            "Effect": "Allow",
             "Resource": "arn:aws:s3:::heyitschris-com-blog/*"
-        },
-        {
-            "Sid": "StaticBlogWebsiteUpdate2",
-            "Action": [
-                "s3:ListBucket"
-            ],
-            "Effect": "Allow",
-            "Resource": "arn:aws:s3:::heyitschris-com-blog"
-        },
-        {
-            "Sid": "StaticBlogWebsiteCloudFrontInvalidation",
-            "Action": [
-                "cloudfront:CreateInvalidation"
-            ],
-            "Effect": "Allow",
-            "Resource": "arn:aws:cloudfront::130783386804:distribution/E1NSOHDL8AF4CQ"
-        },
-        {
-            "Sid": "IAM",
-            "Action": [
-                "iam:PassRole"
-            ],
-            "Effect": "Allow",
-            "Resource": "arn:aws:iam::130783386804:role/CloudFormationDeployS3StaticWebsiteRole"
         }
     ]
 }
