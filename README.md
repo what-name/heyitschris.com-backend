@@ -1,4 +1,4 @@
-![Deploy CF Template](https://github.com/what-name/heyitschris.com-backend/workflows/Deploy%20CF%20Template/badge.svg)
+![Deploy SAM template](https://github.com/what-name/heyitschris.com-backend/workflows/Deploy%20SAM%20template/badge.svg)
 
 # Info
 *Disclaimer: this project was originally made for the [Cloud Resume Challenge](https://cloudresumechallenge.dev/)*
