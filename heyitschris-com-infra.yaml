@@ -15,7 +15,7 @@ Parameters:
   WebsiteDomainName:
     Description: "The name of the website this stack will be deployed for"
     Type: String
-    Default: mydomain.com
+    Default: "heyitschris.com"
     # ConstraintDescription: Only valid domain names
     # AllowedPattern: "\/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\\.[a-zA-Z]{2,}$"
 
@@ -72,10 +72,7 @@ Resources:
   LogsBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Join 
-        - ''
-        - - !Ref WebsiteBucket
-          - '-logs'
+      BucketName: !Sub "${S3BucketName}-logs"
       Tags:
         - Key: CostCenter
           Value: !Sub "${WebsiteDomainName}"
@@ -91,9 +88,7 @@ Resources:
             - Sid: PublicReadForGetBucketObjects
               Effect: Allow
               Principal:
-                CanonicalUser: !GetAtt
-                  - CloudFrontOAI
-                  - S3CanonicalUserId
+                CanonicalUser: !GetAtt CloudFrontOAI.S3CanonicalUserId
               Action: 's3:GetObject'
               Resource: !Sub "arn:aws:s3:::${WebsiteBucket}/*"
         Bucket: !Ref WebsiteBucket
@@ -119,10 +114,7 @@ Resources:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties: 
       CloudFrontOriginAccessIdentityConfig: 
-        Comment: !Join 
-          - ''
-          - - 'The OAI for the bucket: '
-            - !Ref WebsiteBucket
+        Comment: !Sub "The OAI for the bucket: ${S3BucketName}"
             
   ## Cloudfront distribution
   CloudFrontDistribution:
@@ -130,16 +122,10 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-        - DomainName: !Join 
-            - ''
-            - - !Ref WebsiteBucket
-              - '.s3.amazonaws.com'
+        - DomainName: !Sub "${S3BucketName}.s3.amazonaws.com"
           Id: myS3Origin
           S3OriginConfig:
-            OriginAccessIdentity: !Join 
-              - ''
-              - - 'origin-access-identity/cloudfront/'
-                - !Ref CloudFrontOAI
+            OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOAI}"
         Enabled: 'true'
         Comment: Static main website distribution
         DefaultRootObject: index.html
@@ -182,7 +168,7 @@ Resources:
               - TLSv1.1
               - TLSv1.2
             HTTPSPort: 443
-          DomainName: !Sub "${BlogWebsiteBucket}.s3-website-${AWS::Region}.amazonaws.com"
+          DomainName: !Sub "${S3BucketName}-blog.s3-website-${AWS::Region}.amazonaws.com"
         Enabled: 'true'
         Comment: Static blog website distribution
         DefaultRootObject: index.html
@@ -528,12 +514,7 @@ Resources:
 
 Outputs:
   CloudFrontBlogURL:
-    Value: !Join 
-      - ''
-      - - 'https://'
-        - !GetAtt 
-          - BlogCloudFrontDistribution
-          - DomainName
+    Value: !Sub "https://${BlogCloudFrontDistribution.DomainName}"
     Description: HTTPS Access point
   VisitorCounterApi:
     Description: "API Gateway endpoint URL for Prod stage for visitorCounter function"
