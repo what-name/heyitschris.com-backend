@@ -52,16 +52,17 @@ Resources:
                 - iam:DeletePolicyVersion
                 - iam:DeleteRole
                 - iam:DeleteRolePolicy
-                - iam:GetPolicy
-                - iam:GetPolicyVersion
                 - iam:GetRole
                 - iam:GetRolePolicy
-                - iam:ListPolicies
-                - iam:ListPolicyVersions
-                - iam:ListRolePolicies
-                - iam:ListRoleTags
-                - iam:ListRoles
                 - iam:PutRolePolicy
                 - iam:SetDefaultPolicyVersion
                 - iam:TagRole
               Resource: "*"
+            - Effect: Allow
+              Action:
+                - cloudformation:CreateChangeSet
+              Resource: "arn:aws:cloudformation:us-east-1:aws:transform/Serverless-2016-10-31"
+            - Effect: Allow
+              Action:
+                - iam:PassRole
+              Resource: "arn:aws:iam::130783386804:role/heyitschris-com-infra-VisitorCounterFunctionRole-*"
