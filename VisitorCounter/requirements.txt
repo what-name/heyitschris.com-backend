@@ -1,2 +1,4 @@
 boto3
 moto
+pyrsistent == 0.16.0
+pyyaml == 5.3.1
