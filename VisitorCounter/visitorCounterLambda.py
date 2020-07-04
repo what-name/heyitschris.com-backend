@@ -1,28 +1,15 @@
-### NOTES
-# Created by Chris Nagy on 15.05.2020
-
-# Create an IAM Role for this Lambda function with the following:
-# DynamoDB allow: getItem, updateItem
-# or maybe if the retrieval and update will be two seperate Lambda functions
-# then put the two roles for updateItem and getItem seperately on the two functions
-# probably going to keep it in one Lambda function tho for simplicity
-#
-# Increment an atomic counter in DynamoDB
-# Link:
-# https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.Python.03.html#GettingStarted.Python.03.03
-#
-# TO-DO: put this on a blog post incl. frontend js code
-### END NOTES
-
 import json
 import boto3
 import os
 
-dynamodb = boto3.resource('dynamodb')
-ddbTableName = os.environ['databaseName']
-table = dynamodb.Table(ddbTableName)
-
 def handler(event, context):
+    # Initialize dynamodb boto3 object
+    dynamodb = boto3.resource('dynamodb')
+    # Set dynamodb table name variable from env
+    ddbTableName = os.environ['databaseName']
+    table = dynamodb.Table(ddbTableName)
+
+    # Atomic update item in table or add if doesn't exist
     ddbResponse = table.update_item(
         Key={
             "id": "visitorCount"
@@ -33,8 +20,11 @@ def handler(event, context):
         },
         ReturnValues="UPDATED_NEW"
     )
-    print("Response visitor count: ", ddbResponse["Attributes"]["amount"])
+
+    # Format dynamodb response into variable
     responseBody = json.dumps({"visitorCount": int(float(ddbResponse["Attributes"]["amount"]))})
+
+    # Create api response object
     apiResponse = {
         "isBase64Encoded": False,
         "statusCode": 200,
@@ -45,4 +35,6 @@ def handler(event, context):
             "Access-Control-Allow-Methods": "GET,OPTIONS" 
         },
     }
+
+    # Return api response object
     return apiResponse
