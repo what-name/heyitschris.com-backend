@@ -12,7 +12,7 @@ def aws_setup():
   os.environ['AWS_SECRET_ACCESS_KEY'] = 'testing'
   os.environ['AWS_SECURITY_TOKEN'] = 'testing'
   os.environ['AWS_SESSION_TOKEN'] = 'testing'
-  # FIXME specify a region error!
+  os.environ['AWS_DEFAULT_REGION'] = 'us-east-1'
 
   # Database table name into env variable
   os.environ['databaseName'] = 'testing'
@@ -21,7 +21,7 @@ class TestLambdaDDB(unittest.TestCase):
   @mock_dynamodb2
   def test_handler(self):
     # Create dynamodb boto3 object
-    dynamodb = boto3.client('dynamodb', region_name='us-east-1')
+    dynamodb = boto3.client('dynamodb')
     # Get dynamodb table name from env
     ddbTableName = os.environ['databaseName']
     
