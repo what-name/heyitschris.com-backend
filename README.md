@@ -7,7 +7,7 @@ It includes:
 - Service Control Policy for the designated sub-account
 - IAM Policy for the `github-ci/cd` user
 - A GitHub actions workflow that updates the backend infrastructure
-- A CloudFormation template that describes the backend infrastructure
+- A SAM/CloudFormation template that describes the backend infrastructure
 - (Upcoming) Unit tests for the VisitorCounter Lambda function
 - Misc. objects that were required to transfer the project from my main, to a designated AWS Organizations sub-account.
 
@@ -20,7 +20,6 @@ As described in the `.github/workflows/main.yml`, there is a GitHub Actions work
 ## How to deploy
 Follow these steps to manually deploy the static website and all it's components:
 1. Deploy the `heyitschris-com-infra-cf.yaml` template with CloudFormation. Fill out the parameters to your needs.
-2. (To be automated) Put the item `visitorCounter:0` into the freshly created DynamoDB database.
-3. Upload your static website's content to the freshly created, main S3 bucket.
-4. In the outputs of the CloudFormation stack, you will find the CloudFront URL of your new website. The API Gateway URL is displayed there as well, make sure to modify your frontend code to reflect the correct endpoint.
-5. (Optional) Point your domain's name servers to the freshly created Route53 hosted zone.
+2. Upload your static website's content to the freshly created, main S3 bucket.
+3. In the outputs of the CloudFormation stack, you will find the CloudFront URL of your new website. The API Gateway URL is displayed there as well, make sure to modify your frontend code to reflect the correct endpoint.
+4. (Optional) Point your domain's name servers to the freshly created Route53 hosted zone.

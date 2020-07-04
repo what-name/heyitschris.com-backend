@@ -2,7 +2,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  The backend infrastructure for the heyitschris.com website.
+  The backend infrastructure for the heyitschris.com website and blog.
 
 Parameters:
   # FIXME set input constraints for these
@@ -515,7 +515,7 @@ Resources:
 Outputs:
   CloudFrontBlogURL:
     Value: !Sub "https://${BlogCloudFrontDistribution.DomainName}"
-    Description: HTTPS Access point
+    Description: Blog HTTPS Access point
   VisitorCounterApi:
     Description: "API Gateway endpoint URL for Prod stage for visitorCounter function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/visitorCount/"
