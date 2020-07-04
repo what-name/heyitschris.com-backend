@@ -23,6 +23,11 @@ jobs:
     - name: Unittest visitor counter Lambda
       run: python VisitorCounter/test_visitorCounterLambda.py
 
+    - name: Uninstall/clean pip due to conflict with SAM Build
+      run: |
+        python -m pip uninstall pip setuptools
+        rm -rf /github/home/.cache/pip
+
     # AWS
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
