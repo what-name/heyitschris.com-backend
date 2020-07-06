@@ -67,6 +67,14 @@
             "Resource": "arn:aws:s3:::heyitschris-com/*"
         },
         {
+            "Sid": "AllowFrontendUpdateListBucket",
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": "arn:aws:s3:::heyitschris-com"
+        },
+        {
             "Sid": "SAMArtifactsBucketAllow",
             "Effect": "Allow",
             "Action": [
@@ -85,6 +93,14 @@
                 "s3:DeleteObject"
             ],
             "Resource": "arn:aws:s3:::heyitschris-com-blog/*"
-        }
+        },
+        {
+            "Sid": "AllowBlogFrontendUpdateListBucket",
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": "arn:aws:s3:::heyitschris-com-blog"
+        },
     ]
 }
