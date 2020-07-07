@@ -45,6 +45,7 @@
             ],
             "Resource": [
                 "arn:aws:cloudfront::130783386804:distribution/E1NSOHDL8AF4CQ",
+                "arn:aws:cloudfront::130783386804:distribution/E2FW9IWSG6107",
                 "arn:aws:cloudformation:us-east-1:130783386804:stack/heyitschris-com-infra/*",
                 "arn:aws:s3:::cf-templates*/*",
                 "arn:aws:iam::130783386804:role/CloudFormationDeployS3StaticWebsiteRole"
@@ -101,6 +102,6 @@
                 "s3:ListBucket"
             ],
             "Resource": "arn:aws:s3:::heyitschris-com-blog"
-        },
+        }
     ]
 }
