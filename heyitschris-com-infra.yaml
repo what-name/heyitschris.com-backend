@@ -252,79 +252,6 @@ Resources:
       Tags:
         CostCenter: !Ref WebsiteDomainName
 
-  ## FIXME: No need for API Gateway with SAM anymore
-  ## API Gateway
-  # VisitorCounterAPIGateway:
-  #   Type: AWS::ApiGateway::RestApi
-  #   Properties:
-  #     Name: VisitorCounterAPI
-  #     Description: The API for the Lambda function that retrieves and updates the current visitor count
-  #     EndpointConfiguration:
-  #       Types:
-  #         - REGIONAL
-  #     Tags:
-  #       - Key: CostCenter
-  #         Value: !Sub "${WebsiteDomainName}"
-
-  # VisitorCounterAPIGatewayRootMethod:
-  #   Type: AWS::ApiGateway::Method
-  #   Properties:
-  #     AuthorizationType: NONE
-  #     HttpMethod: GET
-  #     Integration:
-  #       IntegrationHttpMethod: POST
-  #       Type: AWS_PROXY
-  #       Uri: !Sub
-  #         - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations
-  #         - lambdaArn: !GetAtt VisitorCountLambda.Arn
-  #     ResourceId: !GetAtt VisitorCounterAPIGateway.RootResourceId
-  #     RestApiId: !Ref VisitorCounterAPIGateway
-
-  # VisitorCounterAPIGatewayOptionsMethod:
-  #   Type: AWS::ApiGateway::Method
-  #   Properties:
-  #     AuthorizationType: NONE
-  #     RestApiId: !Ref VisitorCounterAPIGateway
-  #     ResourceId: !GetAtt VisitorCounterAPIGateway.RootResourceId
-  #     HttpMethod: OPTIONS
-  #     Integration:
-  #       IntegrationResponses:
-  #       - StatusCode: 200
-  #         ResponseParameters:
-  #           method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-  #           method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
-  #           method.response.header.Access-Control-Allow-Origin: "'*'"
-  #         ResponseTemplates:
-  #           application/json: ''
-  #       PassthroughBehavior: WHEN_NO_MATCH
-  #       RequestTemplates:
-  #         application/json: '{"statusCode": 200}'
-  #       Type: MOCK
-  #     MethodResponses:
-  #     - StatusCode: 200
-  #       ResponseModels:
-  #         application/json: 'Empty'
-  #       ResponseParameters:
-  #           method.response.header.Access-Control-Allow-Headers: true
-  #           method.response.header.Access-Control-Allow-Methods: true
-  #           method.response.header.Access-Control-Allow-Origin: true
-
-  # VisitorCounterAPIGatewayDeployment:
-  #   Type: AWS::ApiGateway::Deployment
-  #   DependsOn:
-  #     - VisitorCounterAPIGatewayRootMethod
-  #   Properties:
-  #     RestApiId: !Ref VisitorCounterAPIGateway
-  #     StageName: prod
-
-  # VisitorCounterLambdaApiGatewayInvoke:
-  #   Type: AWS::Lambda::Permission
-  #   Properties:
-  #     Action: lambda:InvokeFunction
-  #     FunctionName: !GetAtt VisitorCountLambda.Arn
-  #     Principal: apigateway.amazonaws.com
-  #     SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${VisitorCounterAPIGateway}/*/GET/
-
   # ACM Certificate for heyitschris.com
   DomainCertificate:
     Type: AWS::CertificateManager::Certificate
@@ -516,6 +443,6 @@ Outputs:
   CloudFrontBlogURL:
     Value: !Sub "https://${BlogCloudFrontDistribution.DomainName}"
     Description: Blog HTTPS Access point
-  VisitorCounterApi:
+  VisitorCounterApiEndpoint:
     Description: "API Gateway endpoint URL for Prod stage for visitorCounter function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/visitorCount/"
