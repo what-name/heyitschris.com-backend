@@ -23,8 +23,9 @@ Originally the domain was bought by an AWS account that turned into an Organizat
 As described in the `.github/workflows/main.yml`, there is a GitHub Actions workflow that is triggered every time there is a push to the master branch. This workflow updates the SAM stack currently deployed. The AWS access keys are stored as GitHub Secrets and the user has very limited access to resources. The SAM Deploy assumes a role to deploy the needed resources. This project is utilizing GitHub Actions over an AWS CodePipeline for cost savings and is a better alternative based on the scope of this project.
 
 ## How to deploy
-Follow these steps to manually deploy the static website and all it's components:
-1. Deploy the `heyitschris-com-infra.yaml` template with [SAM](https://github.com/awslabs/serverless-application-model). Fill out the parameters to your needs.
+Follow these steps to deploy the static website and all it's components:
+0. Make sure [SAM](https://github.com/awslabs/serverless-application-model) is installed and you have configured the credentials for the AWS CLI.
+1. Deploy the `heyitschris-com-infra.yaml` template with `sam build && sam deploy -g`. Fill out the parameters to your needs or modify the `config.toml` beforehand.
 2. Upload your static website's content to the freshly created, main S3 bucket.
-3. In the outputs of the SAM stack, you will find the CloudFront URL of your new website. The API Gateway URL is displayed there as well, make sure to modify your frontend code to reflect the correct endpoint.
+3. In the outputs of the CloudFormation stack, you will find the CloudFront URL of your new website. The API Gateway URL is displayed there as well, make sure to modify your frontend code to reflect the correct endpoint.
 4. (Optional) Point your domain's name servers to the freshly created Route53 hosted zone.
