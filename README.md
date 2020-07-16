@@ -24,8 +24,9 @@ As described in the `.github/workflows/main.yml`, there is a GitHub Actions work
 
 ## How to deploy
 Follow these steps to deploy the static website and all it's components:
-0. Make sure [SAM](https://github.com/awslabs/serverless-application-model) is installed and you have configured the credentials for the AWS CLI.
-1. Deploy the `heyitschris-com-infra.yaml` template with `sam build && sam deploy -g`. Fill out the parameters to your needs or modify the `config.toml` beforehand.
-2. Upload your static website's content to the freshly created, main S3 bucket.
-3. In the outputs of the CloudFormation stack, you will find the CloudFront URL of your new website. The API Gateway URL is displayed there as well, make sure to modify your frontend code to reflect the correct endpoint.
-4. (Optional) Point your domain's name servers to the freshly created Route53 hosted zone.
+
+1. Make sure [SAM](https://github.com/awslabs/serverless-application-model) is installed and you have configured the credentials for the AWS CLI.
+2. Deploy the `heyitschris-com-infra.yaml` template with `sam build && sam deploy -g`. Fill out the parameters to your needs or modify the `config.toml` beforehand.
+3. Upload your static website's content to the freshly created, main S3 bucket.
+4. In the outputs of the CloudFormation stack, you will find the CloudFront URL of your new website. The API Gateway URL is displayed there as well, make sure to modify your frontend code to reflect the correct endpoint.
+5. (Optional) Point your domain's name servers to the freshly created Route53 hosted zone.
