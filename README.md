@@ -17,7 +17,7 @@ It includes:
 - Misc. objects that were required to transfer the project from my main, to a designated AWS Organizations sub-account.
 
 ## Misc.
-Originally the domain was bought by an AWS account that turned into an Organizations master account. Therefore the domain needed to be transferred to the designated sub-account. For the process, see the `domainTransfer.md` file.
+Originally the domain was bought by an AWS account that turned into an Organizations master account. Therefore the domain needed to be transferred to the designated sub-account. For the process, see the [domainTransfer.md](Misc/domainTransfer.md) file.
 
 ## CI/CD Workflow
 As described in the `.github/workflows/main.yml`, there is a GitHub Actions workflow that is triggered every time there is a push to the master branch. This workflow updates the SAM stack currently deployed. The AWS access keys are stored as GitHub Secrets and the user has very limited access to resources. The SAM Deploy assumes a role to deploy the needed resources. This project is utilizing GitHub Actions over an AWS CodePipeline for cost savings and is a better alternative based on the scope of this project.
