@@ -4,7 +4,7 @@
 *Disclaimer: this project was originally made for the [Cloud Resume Challenge](https://cloudresumechallenge.dev/)*
 
 ## Architecture Diagram
-![Architecture Diagram](Static/architecture-diagram.png)
+![Architecture Diagram](Misc/architecture-diagram.png)
 
 ## Contents
 This repository holds the backend code for my personal website [heyitschris.com](https://heyitschris.com).
