@@ -10,10 +10,10 @@ jobs:
     - uses: actions/checkout@v1
     
     # Python unit test
-    - name: Install Python 3.7
+    - name: Install Python 3.8
       uses: actions/setup-python@v2
       with:
-        python-version: 3.7
+        python-version: 3.8
 
     - name: Install dependencies
       run: |
@@ -36,6 +36,7 @@ jobs:
       uses: TractorZoom/sam-cli-action@master
       with:
         sam_command: "build -t heyitschris-com-infra.yaml --debug"
+        sam_version: "0.53"
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
