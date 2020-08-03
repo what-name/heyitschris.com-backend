@@ -35,7 +35,7 @@ jobs:
     - name: SAM Build
       uses: TractorZoom/sam-cli-action@master
       with:
-        sam_command: "build -t heyitschris-com-infra.yaml --debug --use-container"
+        sam_command: "build -t heyitschris-com-infra.yaml --debug"
         sam_version: "0.53"
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
