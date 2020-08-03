@@ -206,7 +206,6 @@ Resources:
       CodeUri: VisitorCounter/
       Handler: visitorCounterLambda.handler
       Runtime: python3.8
-      Role: !GetAtt VisitorCounterFunctionRole.Arn
       Environment:
           Variables: 
             databaseName : !Ref DDBTable
