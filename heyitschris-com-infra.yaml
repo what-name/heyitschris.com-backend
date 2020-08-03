@@ -198,6 +198,37 @@ Resources:
         Type: String
       Tags:
         CostCenter: !Ref WebsiteDomainName
+  
+  ### FIXME can replace with SAM policy templates, see below
+  ## Lambda role to access visitorCount in DynamoDB
+  VisitorCounterFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+        - PolicyName: dynamodbAccessRole
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - dynamodb:GetItem
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+              Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${DDBTable}"
+            - Effect: Allow
+              Action:
+              - logs:*
+              Resource: "*"
 
   ## Lambda function to retrieve visitorCount from DynamoDB
   VisitorCounterFunction:
@@ -206,6 +237,7 @@ Resources:
       CodeUri: VisitorCounter/
       Handler: visitorCounterLambda.handler
       Runtime: python3.8
+      Role: !GetAtt VisitorCounterFunctionRole.Arn
       Environment:
           Variables: 
             databaseName : !Ref DDBTable
@@ -215,9 +247,11 @@ Resources:
           Properties:
             Path: /visitorCount
             Method: get
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref DDBTable
+      # This is the preferred way. I'd need to modify my deploy role's permissions however
+      # Which I am not in the mood for right now. Maybe later
+      # Policies:
+      #   - DynamoDBCrudPolicy:
+      #       TableName: !Ref DDBTable
       Tags:
         CostCenter: !Ref WebsiteDomainName
 
