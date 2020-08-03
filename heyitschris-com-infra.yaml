@@ -254,7 +254,7 @@ Resources:
     Properties:
       ApiStages:
         - ApiId: !Ref ServerlessRestApi
-          Stage: !Ref Prod
+          Stage: Prod
       Description: Usage plan of visitor counter API
       Throttle:
         BurstLimit: 100
