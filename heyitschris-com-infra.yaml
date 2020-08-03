@@ -9,9 +9,6 @@ Parameters:
   S3BucketName:
     Description: "The name of the S3 bucket that will store the static website files"
     Type: String
-  DynamoDBTableName:
-    Description: "The name of the DynamoDB table for the visitor count"
-    Type: String
   WebsiteDomainName:
     Description: "The name of the website this stack will be deployed for"
     Type: String
@@ -238,7 +235,7 @@ Resources:
     Properties:
       CodeUri: VisitorCounter/
       Handler: visitorCounterLambda.handler
-      Runtime: python3.7
+      Runtime: python3.8
       Role: !GetAtt VisitorCounterFunctionRole.Arn
       Environment:
           Variables: 
