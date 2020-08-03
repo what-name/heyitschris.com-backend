@@ -249,17 +249,17 @@ Resources:
       Tags:
         CostCenter: !Ref WebsiteDomainName
 
-  # ServerlessRestApiUsagePlan:
-  #   Type: AWS::ApiGateway::UsagePlan
-  #   Properties:
-  #     ApiStages:
-  #       - ApiId: !Ref ServerlessRestApi
-  #         Stage: !Ref Prod
-  #     Description: Usage plan of visitor counter API
-  #     Throttle:
-  #       BurstLimit: 100
-  #       RateLimit: 50
-  #     UsagePlanName: VisitorCounterLimiter
+  ServerlessRestApiUsagePlan:
+    Type: AWS::ApiGateway::UsagePlan
+    Properties:
+      ApiStages:
+        - ApiId: !Ref ServerlessRestApi
+          Stage: !Ref Prod
+      Description: Usage plan of visitor counter API
+      Throttle:
+        BurstLimit: 100
+        RateLimit: 50
+      UsagePlanName: VisitorCounterLimiter
 
   # ACM Certificate for heyitschris.com
   DomainCertificate:
