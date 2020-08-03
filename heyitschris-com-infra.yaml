@@ -252,6 +252,18 @@ Resources:
       Tags:
         CostCenter: !Ref WebsiteDomainName
 
+  # ServerlessRestApiUsagePlan:
+  #   Type: AWS::ApiGateway::UsagePlan
+  #   Properties:
+  #     ApiStages:
+  #       - ApiId: !Ref ServerlessRestApi
+  #         Stage: !Ref Prod
+  #     Description: Usage plan of visitor counter API
+  #     Throttle:
+  #       BurstLimit: 100
+  #       RateLimit: 50
+  #     UsagePlanName: VisitorCounterLimiter
+
   # ACM Certificate for heyitschris.com
   DomainCertificate:
     Type: AWS::CertificateManager::Certificate
@@ -303,6 +315,17 @@ Resources:
       AliasTarget:
         DNSName: !GetAtt BlogCloudFrontDistribution.DomainName
         HostedZoneId: Z2FDTNDATAQYW2
+    
+  ## DNS Record for my Hashnode blog
+  DNSRecordHeyitschrisDomainKey1:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : !Ref HostedZone
+      Name: !Sub not-blog.${WebsiteDomainName}
+      Type: CNAME
+      TTL: 300
+      ResourceRecords:
+        - hashnode.network
 
   ## Redirect www to the main domain
   DNSRecordMainWWWredirect:
