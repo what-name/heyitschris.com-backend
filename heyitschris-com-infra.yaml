@@ -198,36 +198,6 @@ Resources:
         Type: String
       Tags:
         CostCenter: !Ref WebsiteDomainName
-  
-  ## Lambda role to access visitorCount in DynamoDB
-  VisitorCounterFunctionRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-        - Effect: Allow
-          Principal:
-            Service:
-            - lambda.amazonaws.com
-          Action:
-          - sts:AssumeRole
-      Path: "/"
-      Policies:
-        - PolicyName: dynamodbAccessRole
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-            - Effect: Allow
-              Action:
-              - dynamodb:GetItem
-              - dynamodb:PutItem
-              - dynamodb:UpdateItem
-              Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${DDBTable}"
-            - Effect: Allow
-              Action:
-              - logs:*
-              Resource: "*"
 
   ## Lambda function to retrieve visitorCount from DynamoDB
   VisitorCounterFunction:
@@ -246,6 +216,9 @@ Resources:
           Properties:
             Path: /visitorCount
             Method: get
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DDBTable
       Tags:
         CostCenter: !Ref WebsiteDomainName
 
