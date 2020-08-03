@@ -257,8 +257,8 @@ Resources:
           Stage: Prod
       Description: Usage plan of visitor counter API
       Throttle:
-        BurstLimit: 100
-        RateLimit: 50
+        BurstLimit: 5
+        RateLimit: 3
       UsagePlanName: VisitorCounterLimiter
 
   # ACM Certificate for heyitschris.com
